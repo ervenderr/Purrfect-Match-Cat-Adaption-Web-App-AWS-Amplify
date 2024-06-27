@@ -22,25 +22,12 @@ function App() {
       <Sidebar collapsed={collapsed} />
       <Layout>
         <Topbar setCollapsed={setCollapsed} collapsed={collapsed} colorBgContainer={colorBgContainer} />
-
         <Routes>
           <Route path="/" element={<Dashboard />} />
           <Route path="/manage-cats" element={<ManageCats />} />
           <Route path="/adoption-requests" element={<AdoptionRequest />} />
           <Route path="/user" element={<Users />} />
         </Routes>
-
-        {/* <Content
-          style={{
-            margin: '24px 16px',
-            padding: 24,
-            minHeight: 280,
-            background: colorBgContainer,
-            borderRadius: borderRadiusLG,
-          }}
-        >
-          Content
-        </Content> */}
       </Layout>
     </Layout>
   )
