@@ -1,19 +1,28 @@
 import React from 'react'
 import { Layout, Typography, Button, Card } from 'antd'
 import Lists from './Lists';
+import CreateModal from './CreateModal';
 
 const { Content } = Layout;
 
 const ManageCats = () => {
+
+  const [ open, setOpen ] = React.useState(false);
+
+  const showModal = () => {
+    setOpen(true);
+  }
+
   return (
     <Content
-      style={{
-        margin: "24px 16px",
-        padding: 24,
-        background: "#f5f5f5",
-        minHeight: 280,
-      }}
-    >
+    style={{
+      padding: 24,
+      background: "#f5f5f5",
+      minHeight: '100%',
+      minWidth: 0,
+      overflow: "hidden",
+    }}
+  >
       <Content style={{
         display: 'flex',
         justifyContent: 'space-between'
@@ -29,7 +38,8 @@ const ManageCats = () => {
       </Typography.Text>
 
       <Typography>
-        <Button>Add New Cat</Button>
+        <Button onClick={showModal}>Add New Cat</Button>
+        <CreateModal open={open} setOpen={setOpen} />
     </Typography>
       </Content>
     

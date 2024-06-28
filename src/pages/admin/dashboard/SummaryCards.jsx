@@ -1,15 +1,15 @@
 import React from "react";
-import { Card, Col, Avatar } from "antd";
+import { Card, Col, Avatar, Row } from "antd";
 
 const { Meta } = Card;
 
 const SummaryCards = () => {
   return (
-    <>
-      <Col className="gutter-row" span={6}>
+    <Row gutter={[16, 16]} style={{ width: "100%", display: "flex" }}>
+      <Col xs={24} sm={12} md={8} lg={6} xl={6}>
         <Card
           style={{
-            width: 300,
+            width: "100%",
             marginTop: 16,
           }}
           hoverable
@@ -23,11 +23,11 @@ const SummaryCards = () => {
           />
         </Card>
       </Col>
-      <Col className="gutter-row" span={6}>
+      <Col xs={24} sm={12} md={8} lg={6} xl={6}>
         <Card
           hoverable
           style={{
-            width: 300,
+            width: "100%",
             marginTop: 16,
           }}
         >
@@ -40,11 +40,11 @@ const SummaryCards = () => {
           />
         </Card>
       </Col>
-      <Col className="gutter-row" span={6}>
+      <Col xs={24} sm={12} md={8} lg={6} xl={6}>
         <Card
           hoverable
           style={{
-            width: 300,
+            width: "100%",
             marginTop: 16,
           }}
         >
@@ -57,12 +57,11 @@ const SummaryCards = () => {
           />
         </Card>
       </Col>
-
-      <Col className="gutter-row" span={6}>
+      <Col xs={24} sm={12} md={8} lg={6} xl={6}>
         <Card
           hoverable
           style={{
-            width: 300,
+            width: "100%",
             marginTop: 16,
           }}
         >
@@ -75,7 +74,7 @@ const SummaryCards = () => {
           />
         </Card>
       </Col>
-    </>
+    </Row>
   );
 };
 

@@ -1,58 +1,37 @@
-import React from "react";
-import { Line } from "@ant-design/charts";
+import React from 'react';
+import { PieChart, Pie, Cell, Tooltip, ResponsiveContainer } from 'recharts';
+
+const data = [
+  { name: 'Pending', value: 40 },
+  { name: 'Approved', value: 30 },
+  { name: 'Rejected', value: 10 },
+  { name: 'In Progress', value: 20 },
+];
+
+const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042'];
 
 const ReportChart = () => {
-  const data = [
-    { month: "Jan", cats: 10 },
-    { month: "Feb", cats: 8 },
-    { month: "Mar", cats: 12 },
-    { month: "Apr", cats: 6 },
-    { month: "May", cats: 9 },
-    { month: "Jun", cats: 11 },
-    { month: "Jul", cats: 7 },
-    { month: "Aug", cats: 5 },
-    { month: "Sepr", cats: 10 },
-    { month: "Oct", cats: 13 },
-    { month: "Nov", cats: 9 },
-    { month: "Dec", cats: 11 },
-  ];
-
-  const config = {
-    data,
-    xField: "month",
-    yField: "cats",
-    smooth: true, // Enable smooth line
-    lineStyle: {
-      lineWidth: 2,
-      stroke: "#1890ff", // Line color
-    },
-    point: {
-      shape: "circle",
-      size: 4,
-      style: {
-        fill: "#1890ff", // Point color
-        stroke: "#fff",
-        lineWidth: 1,
-      },
-    },
-    xAxis: {
-      title: {
-        text: "Month",
-      },
-    },
-    yAxis: {
-      title: {
-        text: "Number of Cats",
-      },
-    },
-    meta: {
-      month: { alias: "Month" },
-      cats: { alias: "Number of Cats" },
-    },
-    width: 760,
-  };
-
-  return <Line {...config} />;
-};
+  return (
+    <ResponsiveContainer width="100%" height={300}>
+      <PieChart>
+        <Pie
+          data={data}
+          dataKey="value"
+          nameKey="name"
+          cx="50%"
+          cy="50%"
+          outerRadius={100}
+          fill="#8884d8"
+          label
+        >
+          {data.map((entry, index) => (
+            <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+          ))}
+        </Pie>
+        <Tooltip />
+      </PieChart>
+    </ResponsiveContainer>
+  );
+}
 
 export default ReportChart;

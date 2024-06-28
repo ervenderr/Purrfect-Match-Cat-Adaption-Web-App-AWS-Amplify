@@ -12,7 +12,7 @@ const Sidebar = ({ collapsed }) => {
     const navigate = useNavigate();
 
     return (
-        <Sider trigger={null} collapsible collapsed={collapsed} theme='dark'>
+        <Sider trigger={null} collapsible collapsed={collapsed} theme='dark' style={{ height: '100%' }}>
             <Layout>
                 <Header
                     style={{

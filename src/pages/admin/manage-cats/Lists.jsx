@@ -9,6 +9,7 @@ import {
   Button,
   ConfigProvider,
 } from "antd";
+import { DeleteOutlined, EditOutlined } from "@ant-design/icons";
 
 const originData = [];
 for (let i = 0; i < 20; i++) {
@@ -153,15 +154,13 @@ const Lists = () => {
               disabled={editingKey !== ""}
               onClick={() => edit(record)}
             >
-              <Button primary style={{ marginRight: "5px" }}>
-                Edit
-              </Button>
+              <Button primary style={{ marginRight: "5px" }} icon={<EditOutlined />}></Button>
             </Typography.Link>
             <Popconfirm
               title="Sure to delete?"
               onConfirm={() => handleDelete(record.key)}
             >
-              <Button danger>Delete</Button>
+              <Button danger icon={<DeleteOutlined />}></Button>
             </Popconfirm>
           </>
         );
@@ -196,6 +195,7 @@ const Lists = () => {
     >
       <Form form={form} component={false}>
         <Table
+        size="small"
           scroll={{
             y: "100%",
           }}

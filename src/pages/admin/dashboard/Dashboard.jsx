@@ -1,7 +1,7 @@
-import { Layout, Typography, Divider, Row, Card, Col } from "antd";
+import { Layout, Typography, Row, Col, Card } from "antd";
 import SummaryCards from "./SummaryCards";
-import ReportChart from "./ReportChart";
 import RecentTables from "./RecentTables";
+import ReportChart from "./ReportChart";
 
 const { Content } = Layout;
 
@@ -9,10 +9,11 @@ const Dashboard = () => {
   return (
     <Content
       style={{
-        margin: "24px 16px",
         padding: 24,
         background: "#f5f5f5",
-        minHeight: 280,
+        minHeight: '100%',
+        minWidth: 0,
+        overflow: "hidden",
       }}
     >
       <Typography.Text
@@ -25,27 +26,28 @@ const Dashboard = () => {
         Dashboard
       </Typography.Text>
 
-      <Divider orientation="left"></Divider>
       <Row
         gutter={{
           xs: 8,
           sm: 16,
           md: 24,
-          lg: 32,
+          lg: 16,
         }}
       >
-        <SummaryCards />
+        <Col span={24}>
+          <SummaryCards />
+        </Col>
       </Row>
 
       <Row gutter={16} style={{ marginTop: 16 }}>
-        <Col xs={24} sm={12} md={12} lg={12}>
-          <Card title="Cats Report">
-            <ReportChart />
+        <Col xs={24} sm={24} md={16} lg={16}>
+          <Card title="Recents" style={{ height: '100%' }}>
+            <RecentTables />
           </Card>
         </Col>
-        <Col xs={24} sm={12} md={12} lg={12}>
-          <Card title='Recents' style={{height: '100%'}}>
-            <RecentTables />
+        <Col xs={24} sm={24} md={8} lg={8}>
+          <Card title="Cats Report" style={{ height: '100%' }}>
+            <ReportChart />
           </Card>
         </Col>
       </Row>
