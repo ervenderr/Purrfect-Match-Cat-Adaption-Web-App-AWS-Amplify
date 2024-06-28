@@ -1,5 +1,5 @@
 import React from 'react'
-import { Layout, Typography, Divider } from 'antd'
+import { Layout, Typography, Button, Card } from 'antd'
 import Lists from './Lists';
 
 const { Content } = Layout;
@@ -14,6 +14,10 @@ const ManageCats = () => {
         minHeight: 280,
       }}
     >
+      <Content style={{
+        display: 'flex',
+        justifyContent: 'space-between'
+      }}>
       <Typography.Text
         style={{
           fontSize: "1.5rem",
@@ -24,8 +28,14 @@ const ManageCats = () => {
         List of Cats
       </Typography.Text>
 
-      <Divider orientation="left"></Divider>
+      <Typography>
+        <Button>Add New Cat</Button>
+    </Typography>
+      </Content>
+    
+    <Card>
       <Lists />
+      </Card>
     </Content>
   );
 };

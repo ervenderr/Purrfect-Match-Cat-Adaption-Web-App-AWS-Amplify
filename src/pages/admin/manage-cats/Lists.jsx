@@ -141,10 +141,10 @@ const Lists = () => {
                 marginRight: 8,
               }}
             >
-              Save
+              <Button>Save</Button>
             </Typography.Link>
             <Popconfirm title="Sure to cancel?" onConfirm={cancel}>
-              <a>Cancel</a>
+              <Button>Cancel</Button>
             </Popconfirm>
           </span>
         ) : (
