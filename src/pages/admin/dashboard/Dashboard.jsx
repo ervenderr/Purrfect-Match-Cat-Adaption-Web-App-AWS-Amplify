@@ -1,11 +1,15 @@
 import { Layout, Typography, Row, Col, Card } from "antd";
-import SummaryCards from "./SummaryCards";
-import RecentTables from "./RecentTables";
-import ReportChart from "./ReportChart";
+import SummaryCards from "../../../components/admin/dashboard/SummaryCards";
+import RecentTables from "../../../components/admin/dashboard/RecentTables";
+import ReportChart from "../../../components/admin/dashboard/ReportChart";
+import { useNavigate } from "react-router-dom";
 
 const { Content } = Layout;
 
 const Dashboard = () => {
+  const history = useNavigate();
+
+
   return (
     <Content
       style={{

@@ -1,91 +1,48 @@
-import React, { useState } from "react";
+import { useState, useCallback } from "react";
+import originData from "./sampleData";
 import {
   Form,
-  Input,
-  InputNumber,
   Popconfirm,
   Table,
   Typography,
   Button,
+  Tag,
   ConfigProvider,
 } from "antd";
-import { DeleteOutlined, EditOutlined } from "@ant-design/icons";
+import { DeleteOutlined, EditOutlined} from "@ant-design/icons";
+import EditableCell from "./EditableCell";
 
-const originData = [];
-for (let i = 0; i < 20; i++) {
-  originData.push({
-    key: i.toString(),
-    name: `Edward ${i}`,
-    age: 32,
-    breed: "Orens",
-    status: "Available",
-    description: `lorem ipsum. lorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsum`,
-  });
-}
-
-const EditableCell = ({
-  editing,
-  dataIndex,
-  title,
-  inputType,
-  record,
-  index,
-  children,
-  ...restProps
-}) => {
-  const inputNode = inputType === "number" ? <InputNumber /> : <Input />;
-  return (
-    <td {...restProps}>
-      {editing ? (
-        <Form.Item
-          name={dataIndex}
-          style={{
-            margin: 0,
-          }}
-          rules={[
-            {
-              required: true,
-              message: `Please Input ${title}!`,
-            },
-          ]}
-        >
-          {inputNode}
-        </Form.Item>
-      ) : (
-        children
-      )}
-    </td>
-  );
-};
 
 const Lists = () => {
   const [form] = Form.useForm();
   const [data, setData] = useState(originData);
   const [editingKey, setEditingKey] = useState("");
-  const isEditing = (record) => record.key === editingKey;
+
+  const isEditing = useCallback((record) => record.key === editingKey, [editingKey]);
+
   const edit = (record) => {
     form.setFieldsValue({
       name: "",
-      age: "",
+      cat: "",
       address: "",
       ...record,
     });
     setEditingKey(record.key);
   };
+
   const cancel = () => {
     setEditingKey("");
   };
+
   const save = async (key) => {
     try {
       const row = await form.validateFields();
       const newData = [...data];
       const index = newData.findIndex((item) => key === item.key);
+
       if (index > -1) {
         const item = newData[index];
-        newData.splice(index, 1, {
-          ...item,
-          ...row,
-        });
+        newData.splice(index, 1, { ...item, ...row });
         setData(newData);
         setEditingKey("");
       } else {
@@ -97,6 +54,11 @@ const Lists = () => {
       console.log("Validate Failed:", errInfo);
     }
   };
+
+  const handleDelete = useCallback((key) => {
+    setData(data.filter((item) => item.key !== key));
+  }, [data]);
+
   const columns = [
     {
       title: "Name",
@@ -105,14 +67,14 @@ const Lists = () => {
       editable: true,
     },
     {
-      title: "Age",
-      dataIndex: "age",
-      width: "15%",
+      title: "Address",
+      dataIndex: "address",
+      width: "25%",
       editable: true,
     },
     {
-      title: "Breed",
-      dataIndex: "breed",
+      title: "Cat",
+      dataIndex: "cat",
       width: "15%",
       editable: true,
     },
@@ -121,13 +83,20 @@ const Lists = () => {
       dataIndex: "status",
       width: "15%",
       editable: true,
-    },
-    {
-      title: "Description",
-      dataIndex: "description",
-      width: "15%",
-      editable: true,
-      ellipsis: true,
+      render: (_, record) => {
+        let color = 'green';
+        if (record.status === 'Rejected') {
+          color = 'volcano';
+        }
+        if (record.status === 'Pending') {
+          color = 'geekblue';
+        }
+        return (
+          <Tag color={color} key={record.status}>
+            {record.status.toUpperCase()}
+          </Tag>
+        );
+      },
     },
     {
       title: "operation",
@@ -167,6 +136,7 @@ const Lists = () => {
       },
     },
   ];
+
   const mergedColumns = columns.map((col) => {
     if (!col.editable) {
       return col;
@@ -175,13 +145,13 @@ const Lists = () => {
       ...col,
       onCell: (record) => ({
         record,
-        inputType: col.dataIndex === "age" ? "number" : "text",
         dataIndex: col.dataIndex,
         title: col.title,
         editing: isEditing(record),
       }),
     };
   });
+  
   return (
     <ConfigProvider
       theme={{
@@ -216,5 +186,6 @@ const Lists = () => {
     </ConfigProvider>
   );
 };
+
 
 export default Lists;

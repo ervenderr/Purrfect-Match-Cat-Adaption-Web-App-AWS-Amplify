@@ -7,38 +7,35 @@ import {
 } from "@ant-design/icons";
 import PropTypes from "prop-types";
 
+
 const { Search } = Input;
 const onSearch = (value, _e, info) => console.log(info?.source, value);
 const { Header } = Layout;
 
-const items = [
-  {
-    key: "1",
-    label: (
-      <a
-        target="_blank"
-        rel="noopener noreferrer"
-        href="https://www.antgroup.com"
-      >
-        1st menu item
-      </a>
-    ),
-  },
-  {
-    key: "2",
-    label: (
-      <a
-        target="_blank"
-        rel="noopener noreferrer"
-        href="https://www.antgroup.com"
-      >
-        2nd menu item
-      </a>
-    ),
-  },
-];
 
-const Topbar = ({ setCollapsed, collapsed, colorBgContainer }) => {
+const Topbar = ({ setCollapsed, collapsed, colorBgContainer, adminSignOut}) => {
+
+  const items = [
+    {
+      key: "1",
+      label: (
+        <a
+          target="_blank"
+          rel="noopener noreferrer"
+          href="https://www.antgroup.com"
+        >
+          1st menu item
+        </a>
+      ),
+    },
+    {
+      key: "2",
+      label: (
+        <Button onClick={adminSignOut}>Logout</Button>
+      ),
+    },
+  ];
+
   return (
     <Header
       style={{
@@ -108,6 +105,7 @@ Topbar.propTypes = {
   setCollapsed: PropTypes.func.isRequired,
   collapsed: PropTypes.bool.isRequired,
   colorBgContainer: PropTypes.string.isRequired,
+  adminSignOut: PropTypes.func.isRequired,
 };
 
 export default Topbar;

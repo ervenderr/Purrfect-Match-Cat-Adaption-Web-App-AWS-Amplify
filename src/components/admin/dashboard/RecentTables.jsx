@@ -22,6 +22,20 @@ const columns = [
         title: 'Status',
         dataIndex: 'status',
         key: 'status',
+        render: (_, record) => {
+          let color = 'green';
+          if (record.status === 'Rejected') {
+            color = 'volcano';
+          }
+          if (record.status === 'Pending') {
+            color = 'geekblue';
+          }
+          return (
+            <Tag color={color} key={record.status}>
+              {record.status.toUpperCase()}
+            </Tag>
+          );
+        },
       },
     {
       title: 'Action',
@@ -32,21 +46,21 @@ const columns = [
     {
       key: '1',
       name: 'John Brown',
-      cat: 32,
+      cat: 'Patchie',
       address: 'New York No. 1 Lake Park',
       status: 'Pending',
     },
     {
       key: '2',
       name: 'Jim Green',
-      cat: 42,
+      cat: 'Patchie',
       address: 'London No. 1 Lake Park',
       status: 'Pending',
     },
     {
       key: '3',
       name: 'Joe Black',
-      cat: 32,
+      cat: 'Patchie',
       address: 'Sydney No. 1 Lake Park',
       status: 'Approved',
     },

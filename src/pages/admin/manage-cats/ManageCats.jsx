@@ -1,7 +1,7 @@
 import React from 'react'
 import { Layout, Typography, Button, Card } from 'antd'
-import Lists from './Lists';
-import CreateModal from './CreateModal';
+import Lists from '../../../components/admin/manage-cats/Lists';
+import CreateModal from '../../../components/admin/manage-cats/CreateModal';
 
 const { Content } = Layout;
 

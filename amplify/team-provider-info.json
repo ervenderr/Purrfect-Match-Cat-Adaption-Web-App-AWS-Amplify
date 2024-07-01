@@ -1,0 +1,20 @@
+{
+  "dev": {
+    "awscloudformation": {
+      "AuthRoleName": "amplify-purrfectmatchcatadap-dev-ec88d-authRole",
+      "UnauthRoleArn": "arn:aws:iam::339713029817:role/amplify-purrfectmatchcatadap-dev-ec88d-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::339713029817:role/amplify-purrfectmatchcatadap-dev-ec88d-authRole",
+      "Region": "us-east-2",
+      "DeploymentBucketName": "amplify-purrfectmatchcatadap-dev-ec88d-deployment",
+      "UnauthRoleName": "amplify-purrfectmatchcatadap-dev-ec88d-unauthRole",
+      "StackName": "amplify-purrfectmatchcatadap-dev-ec88d",
+      "StackId": "arn:aws:cloudformation:us-east-2:339713029817:stack/amplify-purrfectmatchcatadap-dev-ec88d/304a9b90-3772-11ef-b012-069df8d16edf",
+      "AmplifyAppId": "doqefy8duc035"
+    },
+    "categories": {
+      "auth": {
+        "purrfectmatchcatadap48cf6bb5": {}
+      }
+    }
+  }
+}
