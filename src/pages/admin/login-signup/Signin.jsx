@@ -46,10 +46,10 @@ const Signin = ({ isloggedIn }) => {
         <div style={{ display: 'flex', flexDirection:'column', justifyContent:'center', alignItems: 'center', height:'100vh', width:'500', background: '#001529'}}>
             <h1 style={{ color: 'white'}}>Purrfect Match</h1>
             <Card style={{ display: 'flex', marginBottom: 25}}>
-            <Title level={2} style={{margin: '0px 0 15px'}}>Sign In</Title>
+            <Title level={2} style={{margin: '0px 0 15px', textAlign:'center'}}>Sign In</Title>
             <Form layout='vertical'>
                 <Form.Item
-                    label="Username"
+                    label="Admin username"
                     name="username"
                     rules={[{ required: true, message: 'Please enter your username' }]}
                 >

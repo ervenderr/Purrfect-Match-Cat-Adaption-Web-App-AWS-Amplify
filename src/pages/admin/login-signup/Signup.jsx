@@ -1,41 +1,78 @@
-import React, { useState } from 'react';
+import { Form, Input, Button, Card, Typography } from 'antd';
+import { signUp, getCurrentUser } from 'aws-amplify/auth';
+import { useNavigate } from 'react-router-dom';
+import { useState, useEffect } from 'react';
 
-const Signup = ({loggedIn}) => {
+const { Title } = Typography;
+
+const Signup = () => {
+
     const [username, setUsername] = useState('');
-    const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const [error, setError] = useState('');
+    const navigate = useNavigate();
 
-    console.log('isloggedIn:', loggedIn);
-    const handleSignup = () => {
-        // Handle signup logic here
-        console.log('Username:', username);
-        console.log('Email:', email);
-        console.log('Password:', password);
+    useEffect(() => {
+        checkCurrentUser();
+    }, []);
+
+    const checkCurrentUser = async () => {
+        try {
+            const user = await getCurrentUser();
+            console.log('Already logged in:', user);
+            // isloggedIn(true);
+            navigate('/dashboard');
+        } catch (error) {
+            console.log('No current user:', error);
+        }
+        setLoading(false);
     };
 
+    const handleSignin = async () => {
+
+        try {
+            await signUp({ username, password });
+            // navigate('/dashboard');
+            // console.log('Sign up: ', { username, password });
+        } catch (error) {
+            console.error('Error signing up:', error);
+            setError('Failed to sign up. Please check your credentials.');
+        }
+    };
+
+    const [loading, setLoading] = useState(true);
+    
+    if (loading) return <div>Loading...</div>;
+
     return (
-        <div>
-            <h2>Signup</h2>
-            <input
-                type="text"
-                placeholder="Username"
-                value={username}
-                onChange={(e) => setUsername(e.target.value)}
-            />
-            <input
-                type="email"
-                placeholder="Email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-            />
-            <input
-                type="password"
-                placeholder="Password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-            />
-            <button onClick={handleSignup}>Signup</button>
-        </div>
+        <div style={{ display: 'flex', flexDirection:'column', justifyContent:'center', alignItems: 'center', height:'100vh', width:'500', background: '#001529'}}>
+        <h1 style={{ color: 'white'}}>Purrfect Match</h1>
+        <Card style={{ display: 'flex', marginBottom: 25}}>
+        <Title level={2} style={{margin: '0px 0 15px', textAlign:'center'}}>Sign Up</Title>
+        <Form layout='vertical'>
+                <Form.Item
+                    label="Admin username"
+                    name="username"
+                    rules={[{ required: true, message: 'Please enter your username' }]}
+                >
+                    <Input value={username} onChange={(e) => setUsername(e.target.value)} />
+                </Form.Item>
+                <Form.Item
+                    label="Password"
+                    name="password"
+                    rules={[{ required: true, message: 'Please enter your password' }]}
+                >
+                    <Input.Password value={password} onChange={(e) => setPassword(e.target.value)} />
+                </Form.Item>
+                <Form.Item>
+                    <Button type="primary" onClick={handleSignin}>
+                        Sign In
+                    </Button>
+                </Form.Item>
+                {error && <Alert message={error} type="error" />}
+            </Form>
+        </Card>
+    </div>
     );
 };
 
