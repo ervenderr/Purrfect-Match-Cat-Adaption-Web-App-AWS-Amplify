@@ -38,7 +38,7 @@ const Sidebar = ({ collapsed }) => {
 
                 items={[
                     {
-                      key: '/',
+                      key: '/dashboard',
                       icon: <HomeOutlined />,
                       label: 'Dashboard',
                     },

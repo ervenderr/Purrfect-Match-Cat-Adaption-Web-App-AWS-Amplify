@@ -7,8 +7,6 @@ import { useNavigate } from "react-router-dom";
 const { Content } = Layout;
 
 const Dashboard = () => {
-  const history = useNavigate();
-
 
   return (
     <Content
