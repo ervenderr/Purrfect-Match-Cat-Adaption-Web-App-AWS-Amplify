@@ -2,7 +2,6 @@ import { Layout, Typography, Row, Col, Card } from "antd";
 import SummaryCards from "../../../components/admin/dashboard/SummaryCards";
 import RecentTables from "../../../components/admin/dashboard/RecentTables";
 import ReportChart from "../../../components/admin/dashboard/ReportChart";
-import { useNavigate } from "react-router-dom";
 
 const { Content } = Layout;
 
