@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { signIn, getCurrentUser } from 'aws-amplify/auth';
+import { signIn, signOut } from 'aws-amplify/auth';
 import { useNavigate } from 'react-router-dom';
 import { Input, Button, Typography, Form, Alert, Card } from 'antd';
+import useAuthCheck from '../../../components/admin/utils/useAuthCheck';
 
 const { Title } = Typography;
 
@@ -11,36 +12,21 @@ const Signin = ({ isloggedIn }) => {
     const [error, setError] = useState('');
     const navigate = useNavigate();
 
-    useEffect(() => {
-        checkCurrentUser();
-    }, []);
-
-    const checkCurrentUser = async () => {
-        try {
-            const user = await getCurrentUser();
-            console.log('Already logged in:', user);
-            isloggedIn(true);
-            navigate('/dashboard');
-        } catch (error) {
-            console.log('No current user:', error);
-        }
-        setLoading(false);
-    };
+    useAuthCheck();
 
     const handleSignin = async () => {
 
         try {
             await signIn({ username, password });
+            isloggedIn();
             navigate('/dashboard');
         } catch (error) {
             console.error('Error signing in:', error);
-            setError('Failed to sign in. Please check your credentials.');
+            setError(error.message);
         }
     };
 
-    const [loading, setLoading] = useState(true);
     
-    if (loading) return <div>Loading...</div>;
 
     return (
         <div style={{ display: 'flex', flexDirection:'column', justifyContent:'center', alignItems: 'center', height:'100vh', width:'500', background: '#001529'}}>

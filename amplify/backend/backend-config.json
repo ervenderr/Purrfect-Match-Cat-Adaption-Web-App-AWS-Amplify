@@ -1,6 +1,24 @@
 {
+  "api": {
+    "purrfectmatchcatadap": {
+      "dependsOn": [],
+      "output": {
+        "authConfig": {
+          "additionalAuthenticationProviders": [],
+          "defaultAuthentication": {
+            "apiKeyConfig": {
+              "apiKeyExpirationDays": 7
+            },
+            "authenticationType": "API_KEY"
+          }
+        }
+      },
+      "providerPlugin": "awscloudformation",
+      "service": "AppSync"
+    }
+  },
   "auth": {
-    "purrfectmatchcatadap48cf6bb5": {
+    "purrfectmatchcatadap3706e259": {
       "customAuth": false,
       "dependsOn": [],
       "frontendAuthConfig": {

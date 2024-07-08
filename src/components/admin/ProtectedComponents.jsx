@@ -5,29 +5,19 @@ import AdoptionRequest from '../../pages/admin/adoption-request/AdoptionRequest'
 import Users from '../../pages/admin/users/Users';
 import useAuthCheck from './utils/useAuthCheck';
 
-const ProtectedDashboard = () => {
+const withAuthCheck = (Component) => () => {
   useAuthCheck();
-  return <Dashboard />;
+  return <Component />;
 };
 
-const ProtectedManageCats = () => {
-  useAuthCheck();
-  return <ManageCats />;
-};
-
-const ProtectedAdoptionRequest = () => {
-  useAuthCheck();
-  return <AdoptionRequest />;
-};
-
-const ProtectedUsers = () => {
-  useAuthCheck();
-  return <Users />;
-};
+const ProtectedDashboard = withAuthCheck(Dashboard);
+const ProtectedManageCats = withAuthCheck(ManageCats);
+const ProtectedAdoptionRequest = withAuthCheck(AdoptionRequest);
+const ProtectedUsers = withAuthCheck(Users);
 
 export {
   ProtectedDashboard,
   ProtectedManageCats,
   ProtectedAdoptionRequest,
-  ProtectedUsers
+  ProtectedUsers,
 };

@@ -14,7 +14,7 @@ const ReportChart = () => {
   return (
     <ResponsiveContainer width="100%" height={300}>
       <PieChart>
-        <Pie
+        {/* <Pie
           data={data}
           dataKey="value"
           nameKey="name"
@@ -24,11 +24,11 @@ const ReportChart = () => {
           fill="#8884d8"
           label
         >
-          {data.map((entry, index) => (
-            <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+          {data.map((entry) => (
+            <Cell key={`cell-${entry.name}`} fill={COLORS[data.indexOf(entry) % COLORS.length]} />
           ))}
         </Pie>
-        <Tooltip />
+        <Tooltip /> */}
       </PieChart>
     </ResponsiveContainer>
   );

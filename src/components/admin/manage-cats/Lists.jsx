@@ -1,4 +1,4 @@
-import { useState, useCallback } from "react";
+import { useEffect, useState } from "react";
 import originData from "./sampleData";
 import {
   Form,
@@ -9,54 +9,74 @@ import {
   ConfigProvider,
 } from "antd";
 import { DeleteOutlined, EditOutlined} from "@ant-design/icons";
-import EditableCell from "./EditableCell";
+import { generateClient } from 'aws-amplify/api';
+import { listCats } from "../../../graphql/queries";
+import { createCat, deleteCat } from '../../../graphql/mutations';
 
 
 const Lists = () => {
   const [form] = Form.useForm();
-  const [data, setData] = useState(originData);
-  const [editingKey, setEditingKey] = useState("");
+  const [data, setData] = useState([]);
 
-  const isEditing = useCallback((record) => record.key === editingKey, [editingKey]);
+  const client = generateClient();
+
+  useEffect(() => {
+    fetchCats();
+  }, []);
+
+  const fetchCats = async () => {
+    try {
+      const catsData = await client.graphql({ query: listCats });
+      const cats = catsData.data.listCats.items;
+      console.log("Cats data:", cats);
+      setData(cats);
+    } catch (error) {
+      console.error("Error fetching cats:", error);
+    }
+  }
+
 
   const edit = (record) => {
-    form.setFieldsValue({
-      name: "",
-      age: "",
-      address: "",
-      ...record,
-    });
-    setEditingKey(record.key);
+    console.log("Editing record:", record);
   };
 
-  const cancel = () => {
-    setEditingKey("");
-  };
 
-  const save = async (key) => {
-    try {
-      const row = await form.validateFields();
-      const newData = [...data];
-      const index = newData.findIndex((item) => key === item.key);
+  const handleDelete = async (id) => {
+    console.log("Deleting key:", id);
 
-      if (index > -1) {
-        const item = newData[index];
-        newData.splice(index, 1, { ...item, ...row });
-        setData(newData);
-        setEditingKey("");
-      } else {
-        newData.push(row);
-        setData(newData);
-        setEditingKey("");
+    const result = await client.graphql({
+      query: deleteCat,
+      variables: {
+        input: {
+          id: id
+        }
       }
-    } catch (errInfo) {
-      console.log("Validate Failed:", errInfo);
-    }
-  };
+    });
+    
+  }
 
-  const handleDelete = useCallback((key) => {
-    setData(data.filter((item) => item.key !== key));
-  }, [data]);
+
+  const createCats = async () => {
+    try {
+      const result = await client.graphql({
+        query: createCat,
+        variables: {
+          input: {
+            name: 'Mittens',
+            age: 5,
+            breed: 'Siamese',
+            description: 'A very playful cat',
+            image: 'https://images.unsplash.com/photo-1573497019702-3d9b3e2d4f4b',
+          }
+        }
+      });
+      
+    } catch (error) {
+      console.error("Error creating cat:", error)
+    }
+  }
+  
+  
 
   const columns = [
     {
@@ -86,7 +106,7 @@ const Lists = () => {
     {
       title: "Description",
       dataIndex: "description",
-      width: "25%",
+      width: "20%",
       editable: true,
       ellipsis: true,
     },
@@ -99,57 +119,23 @@ const Lists = () => {
     {
       title: "operation",
       dataIndex: "operation",
-      render: (_, record) => {
-        const editable = isEditing(record);
-        return editable ? (
-          <span>
-            <Typography.Link
-              onClick={() => save(record.key)}
-              style={{
-                marginRight: 8,
-              }}
-            >
-              <Button>Save</Button>
-            </Typography.Link>
-            <Popconfirm title="Sure to cancel?" onConfirm={cancel}>
-              <Button>Cancel</Button>
-            </Popconfirm>
-          </span>
-        ) : (
-          <>
-            <Typography.Link
-              disabled={editingKey !== ""}
-              onClick={() => edit(record)}
-            >
-              <Button primary style={{ marginRight: "5px" }} icon={<EditOutlined />}></Button>
-            </Typography.Link>
-            <Popconfirm
-              title="Sure to delete?"
-              onConfirm={() => handleDelete(record.key)}
-            >
-              <Button danger icon={<DeleteOutlined />}></Button>
-            </Popconfirm>
-          </>
-        );
-      },
+      render: (_, record) => (
+        <>
+          <Typography.Link
+            onClick={() => edit(record)}
+          >
+            <Button primary style={{ marginRight: "5px" }} icon={<EditOutlined />} />
+          </Typography.Link>
+          <Popconfirm
+            title="Sure to delete?"
+            onConfirm={() => handleDelete(record.id)}
+          >
+            <Button danger icon={<DeleteOutlined />} />
+          </Popconfirm>
+        </>
+      ),
     },
   ];
-
-  const mergedColumns = columns.map((col) => {
-    if (!col.editable) {
-      return col;
-    }
-    return {
-      ...col,
-      onCell: (record) => ({
-        record,
-        inputType: col.dataIndex === "age" ? "number" : "text", 
-        dataIndex: col.dataIndex,
-        title: col.title,
-        editing: isEditing(record),
-      }),
-    };
-  });
   
   return (
     <ConfigProvider
@@ -162,24 +148,20 @@ const Lists = () => {
         },
       }}
     >
+      <Button onClick={createCats}>Create Cat</Button>
       <Form form={form} component={false}>
         <Table
         size="small"
           scroll={{
             y: "100%",
           }}
-          components={{
-            body: {
-              cell: EditableCell,
-            },
-          }}
           bordered
           dataSource={data}
-          columns={mergedColumns}
+          columns={columns}
           rowClassName="editable-row"
-          pagination={{
-            onChange: cancel,
-          }}
+          // pagination={{
+          //   onChange:,
+          // }}
         />
       </Form>
     </ConfigProvider>

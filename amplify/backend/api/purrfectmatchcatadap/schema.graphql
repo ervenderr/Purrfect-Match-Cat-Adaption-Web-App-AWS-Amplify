@@ -1,0 +1,24 @@
+# This "input" configures a global authorization rule to enable public access to
+# all models in this schema. Learn more about authorization rules here: https://docs.amplify.aws/cli/graphql/authorization-rules
+input AMPLIFY { globalAuthRule: AuthRule = { allow: public } } # FOR TESTING ONLY!
+
+type Cat @model {
+  id: ID!
+  name: String!
+  breed: String!
+  age: Int!
+  status: String!
+  description: String!
+  image: String!
+}
+
+# {
+#   "id": "nami4532",
+#   "name": "Nami",
+#   "breed": "Persian",
+#   "age": 1,
+#   "description": "Nami is a very playful cat. She loves to play with toys and is very friendly. She is looking for a loving home.",
+#   "image": "",
+#   "createdAt": "2021-07-07T20:00:00.000Z",
+#   "updatedAt": "2021-07-07T20:00:00.000Z"
+# }
