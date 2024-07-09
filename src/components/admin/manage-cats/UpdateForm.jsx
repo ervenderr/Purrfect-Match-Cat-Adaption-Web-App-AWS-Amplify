@@ -6,7 +6,7 @@ import { generateClient } from 'aws-amplify/api';
 import { useState } from 'react';
 
 
-const CreateForm = ({ setOpen, fetchCats }) => {
+const UpdateForm = ({ setOpen, fetchCats }) => {
   const [form] = Form.useForm();
   const client = generateClient();
   const [loadings, setLoadings] = useState();
@@ -41,19 +41,19 @@ const CreateForm = ({ setOpen, fetchCats }) => {
       await schema.validate(values, { abortEarly: false });
 
       // Submit the form to the backend
-      await client.graphql({
-        query: createCat,
-        variables: {
-          input: {
-            name: values.catname,
-            age: values.age,
-            breed: values.breed,
-            status: values.status,
-            description: values.description,
-            image: '',
-          }
-        }
-      });
+      // await client.graphql({
+      //   query: createCat,
+      //   variables: {
+      //     input: {
+      //       name: values.catname,
+      //       age: values.age,
+      //       breed: values.breed,
+      //       status: values.status,
+      //       description: values.description,
+      //       image: '',
+      //     }
+      //   }
+      // });
 
       setLoadings(true);
 
@@ -186,4 +186,4 @@ const CreateForm = ({ setOpen, fetchCats }) => {
   );
 };
 
-export default CreateForm;
+export default UpdateForm;

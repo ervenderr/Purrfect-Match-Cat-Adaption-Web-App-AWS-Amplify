@@ -11,14 +11,3 @@ type Cat @model {
   description: String!
   image: String!
 }
-
-# {
-#   "id": "nami4532",
-#   "name": "Nami",
-#   "breed": "Persian",
-#   "age": 1,
-#   "description": "Nami is a very playful cat. She loves to play with toys and is very friendly. She is looking for a loving home.",
-#   "image": "",
-#   "createdAt": "2021-07-07T20:00:00.000Z",
-#   "updatedAt": "2021-07-07T20:00:00.000Z"
-# }

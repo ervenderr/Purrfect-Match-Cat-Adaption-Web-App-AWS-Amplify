@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Modal } from 'antd';
 import CreateForm from './CreateForm';
 
-const CreateModal = ({ setOpen, open }) => {
+const CreateModal = ({ setOpen, open, fetchCats }) => {
   return (
     <Modal
       title="Create a new cat"
@@ -10,7 +10,7 @@ const CreateModal = ({ setOpen, open }) => {
       onCancel={() => setOpen(false)}
       footer={null} 
     >
-      <CreateForm />
+      <CreateForm setOpen={setOpen} fetchCats={fetchCats} />
     </Modal>
   );
 };

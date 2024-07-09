@@ -1,5 +1,3 @@
-import { useEffect, useState } from "react";
-import originData from "./sampleData";
 import {
   Form,
   Popconfirm,
@@ -9,74 +7,22 @@ import {
   ConfigProvider,
 } from "antd";
 import { DeleteOutlined, EditOutlined} from "@ant-design/icons";
-import { generateClient } from 'aws-amplify/api';
-import { listCats } from "../../../graphql/queries";
-import { createCat, deleteCat } from '../../../graphql/mutations';
+import UpdateModal from "./UpdateModal";
+import { useState } from "react";
 
 
-const Lists = () => {
+
+const Lists = ({ cat, handleDelete, handleUpdate }) => {
   const [form] = Form.useForm();
-  const [data, setData] = useState([]);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
-  const client = generateClient();
-
-  useEffect(() => {
-    fetchCats();
-  }, []);
-
-  const fetchCats = async () => {
-    try {
-      const catsData = await client.graphql({ query: listCats });
-      const cats = catsData.data.listCats.items;
-      console.log("Cats data:", cats);
-      setData(cats);
-    } catch (error) {
-      console.error("Error fetching cats:", error);
-    }
-  }
-
+  const showModal = () => {
+    setIsModalOpen(true);
+  };
 
   const edit = (record) => {
     console.log("Editing record:", record);
   };
-
-
-  const handleDelete = async (id) => {
-    console.log("Deleting key:", id);
-
-    const result = await client.graphql({
-      query: deleteCat,
-      variables: {
-        input: {
-          id: id
-        }
-      }
-    });
-    
-  }
-
-
-  const createCats = async () => {
-    try {
-      const result = await client.graphql({
-        query: createCat,
-        variables: {
-          input: {
-            name: 'Mittens',
-            age: 5,
-            breed: 'Siamese',
-            description: 'A very playful cat',
-            image: 'https://images.unsplash.com/photo-1573497019702-3d9b3e2d4f4b',
-          }
-        }
-      });
-      
-    } catch (error) {
-      console.error("Error creating cat:", error)
-    }
-  }
-  
-  
 
   const columns = [
     {
@@ -122,9 +68,11 @@ const Lists = () => {
       render: (_, record) => (
         <>
           <Typography.Link
-            onClick={() => edit(record)}
+            // onClick={() => edit(record)}
           >
-            <Button primary style={{ marginRight: "5px" }} icon={<EditOutlined />} />
+            <Button primary="true" onClick={showModal} style={{ marginRight: "5px" }} icon={<EditOutlined />} />
+            <UpdateModal isModalOpen={isModalOpen} setIsModalOpen={setIsModalOpen} />
+            <Button warning icon={<DeleteOutlined />} onClick={() => handleUpdate(record.id)} />
           </Typography.Link>
           <Popconfirm
             title="Sure to delete?"
@@ -148,7 +96,6 @@ const Lists = () => {
         },
       }}
     >
-      <Button onClick={createCats}>Create Cat</Button>
       <Form form={form} component={false}>
         <Table
         size="small"
@@ -156,9 +103,10 @@ const Lists = () => {
             y: "100%",
           }}
           bordered
-          dataSource={data}
+          dataSource={cat}
           columns={columns}
           rowClassName="editable-row"
+          rowKey="id"
           // pagination={{
           //   onChange:,
           // }}
