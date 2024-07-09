@@ -9,20 +9,24 @@ import {
 import { DeleteOutlined, EditOutlined} from "@ant-design/icons";
 import UpdateModal from "./UpdateModal";
 import { useState } from "react";
+import { getCat } from "../../../graphql/queries";
+import { generateClient } from "aws-amplify/api";
+import { useEffect } from "react";
 
 
 
-const Lists = ({ cat, handleDelete, handleUpdate }) => {
+const Lists = ({ cat, handleDelete, fetchCats }) => {
   const [form] = Form.useForm();
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [currentCatData, setCurrentCatData] = useState({});
+  const client = generateClient();
 
-  const showModal = () => {
+
+  const showModal = (id, name, age, breed, status, description) => {
     setIsModalOpen(true);
+    setCurrentCatData({"id": id, "name": name, 'age': age, 'breed': breed, 'status': status, 'description': description});
   };
 
-  const edit = (record) => {
-    console.log("Editing record:", record);
-  };
 
   const columns = [
     {
@@ -68,11 +72,14 @@ const Lists = ({ cat, handleDelete, handleUpdate }) => {
       render: (_, record) => (
         <>
           <Typography.Link
-            // onClick={() => edit(record)}
+            // onClick={() => getCatRecord(record.id)}
           >
-            <Button primary="true" onClick={showModal} style={{ marginRight: "5px" }} icon={<EditOutlined />} />
-            <UpdateModal isModalOpen={isModalOpen} setIsModalOpen={setIsModalOpen} />
-            <Button warning icon={<DeleteOutlined />} onClick={() => handleUpdate(record.id)} />
+            <Button 
+            primary="true" 
+            onClick={() => showModal(record.id, record.name, record.age, record.breed, record.status, record.description)} 
+            style={{ marginRight: "5px" }} icon={<EditOutlined 
+            />} />
+            <UpdateModal isModalOpen={isModalOpen} setIsModalOpen={setIsModalOpen} catData={currentCatData} fetchCats={fetchCats} />
           </Typography.Link>
           <Popconfirm
             title="Sure to delete?"
@@ -99,9 +106,6 @@ const Lists = ({ cat, handleDelete, handleUpdate }) => {
       <Form form={form} component={false}>
         <Table
         size="small"
-          scroll={{
-            y: "100%",
-          }}
           bordered
           dataSource={cat}
           columns={columns}

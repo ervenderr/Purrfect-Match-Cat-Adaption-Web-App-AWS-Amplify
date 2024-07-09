@@ -76,13 +76,13 @@ const ManageCats = () => {
       </Typography.Text>
 
       <Typography>
-        <Button onClick={showModal}>Add New Cat</Button>
+        <Button type="primary" onClick={showModal}>Add New Cat</Button>
         <CreateModal open={open} setOpen={setOpen} fetchCats={fetchCats}/>
     </Typography>
       </Content>
     
     <Card>
-      <Lists cat={cat} handleDelete={handleDelete} handleUpdate={handleUpdate} />
+      <Lists cat={cat} handleDelete={handleDelete} fetchCats={fetchCats} />
       </Card>
     </Content>
   );

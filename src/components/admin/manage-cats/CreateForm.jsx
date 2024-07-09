@@ -73,7 +73,11 @@ const CreateForm = ({ setOpen, fetchCats }) => {
   
   return (
     <div>
-      <Form form={form} onFinish={onFinish} layout='vertical'>
+      <Form form={form} onFinish={onFinish} layout='vertical'
+      initialValues={{
+        ["status"]: "Available",
+      }}
+      >
         <Form.Item
           label="Cat Name"
           name="catname"
@@ -177,7 +181,7 @@ const CreateForm = ({ setOpen, fetchCats }) => {
           </Upload>
         </Form.Item>
         <Form.Item style={{ textAlign: 'right' }}>
-          <Button primary="true" htmlType="submit" loading={loadings} >
+          <Button type="primary" htmlType="submit" loading={loadings} >
             Submit
           </Button>
         </Form.Item>

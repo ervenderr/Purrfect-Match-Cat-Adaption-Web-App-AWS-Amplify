@@ -1,15 +1,27 @@
 import { Form, Input, InputNumber, Button, Upload, message, Select } from 'antd';
 import { UploadOutlined } from '@ant-design/icons';
 import * as yup from 'yup';
-import { createCat } from '../../../graphql/mutations';
+import { updateCat } from '../../../graphql/mutations';
 import { generateClient } from 'aws-amplify/api';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 
-const UpdateForm = ({ setOpen, fetchCats }) => {
+const UpdateForm = ({ setOpen, catData, fetchCats }) => {
   const [form] = Form.useForm();
   const client = generateClient();
   const [loadings, setLoadings] = useState();
+
+  useEffect(() => {
+    if (catData) {
+      form.setFieldsValue({
+        catname: catData.name,
+        age: catData.age,
+        breed: catData.breed,
+        status: catData.status,
+        description: catData.description,
+      });
+    }
+  }, [catData, form]);
 
   const props = {
     beforeUpload: (file) => {
@@ -41,19 +53,20 @@ const UpdateForm = ({ setOpen, fetchCats }) => {
       await schema.validate(values, { abortEarly: false });
 
       // Submit the form to the backend
-      // await client.graphql({
-      //   query: createCat,
-      //   variables: {
-      //     input: {
-      //       name: values.catname,
-      //       age: values.age,
-      //       breed: values.breed,
-      //       status: values.status,
-      //       description: values.description,
-      //       image: '',
-      //     }
-      //   }
-      // });
+      await client.graphql({
+        query: updateCat,
+        variables: {
+          input: {
+            id: catData.id,
+            name: values.catname,
+            age: values.age,
+            breed: values.breed,
+            status: values.status,
+            description: values.description,
+            image: '',
+          }
+        }
+      });
 
       setLoadings(true);
 
@@ -62,7 +75,7 @@ const UpdateForm = ({ setOpen, fetchCats }) => {
         setLoadings(false);
         setOpen(false);
         console.log('Valid form data:', values);
-        message.success('Cat created successfully');
+        message.success('Cat updated successfully');
       }, 2000);
 
     } catch (errors) {
@@ -177,7 +190,7 @@ const UpdateForm = ({ setOpen, fetchCats }) => {
           </Upload>
         </Form.Item>
         <Form.Item style={{ textAlign: 'right' }}>
-          <Button primary="true" htmlType="submit" loading={loadings} >
+          <Button type="primary" htmlType="submit" loading={loadings} >
             Submit
           </Button>
         </Form.Item>
