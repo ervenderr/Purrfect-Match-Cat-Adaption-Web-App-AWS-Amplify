@@ -5,6 +5,7 @@ import CreateModal from '../../../components/admin/manage-cats/CreateModal';
 import { generateClient } from 'aws-amplify/api';
 import { listCats } from "../../../graphql/queries";
 import { deleteCat } from '../../../graphql/mutations';
+import { onCreateCat, onDeleteCat, onUpdateCat } from '../../../graphql/subscriptions';
 
 const { Content } = Layout;
 
@@ -28,9 +29,40 @@ const ManageCats = () => {
     fetchCats();
   }, [fetchCats]);
 
-  const handleUpdate = async (id) => {
-    console.log("Updating record:", id);
-  }
+  useEffect(() => {
+    const subscriptions = [];
+
+    const createSub = client.graphql({ query: onCreateCat }).subscribe({
+      next: ({ data }) => {
+        console.log('Create Subscription data:', data);
+        fetchCats();
+      },
+      error: (error) => console.warn('Create Subscription error:', error),
+    });
+
+    const deleteSub = client.graphql({ query: onDeleteCat }).subscribe({
+      next: ({ data }) => {
+        console.log('Delete Subscription data:', data);
+        fetchCats();
+      },
+      error: (error) => console.warn('Delete Subscription error:', error),
+    });
+
+    const updateSub = client.graphql({ query: onUpdateCat }).subscribe({
+      next: ({ data }) => {
+        console.log('Update Subscription data:', data);
+        fetchCats();
+      },
+      error: (error) => console.warn('Update Subscription error:', error),
+    });
+
+    subscriptions.push(createSub, deleteSub, updateSub);
+
+    // Clean up subscriptions on unmount
+    return () => {
+      subscriptions.forEach((sub) => sub.unsubscribe());
+    };
+  }, [client, fetchCats]);
 
   const handleDelete = async (id) => {
     console.log("Deleting key:", id);

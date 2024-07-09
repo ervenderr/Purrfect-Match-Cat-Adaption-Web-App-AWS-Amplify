@@ -3,7 +3,8 @@ import { UploadOutlined } from '@ant-design/icons';
 import * as yup from 'yup';
 import { createCat } from '../../../graphql/mutations';
 import { generateClient } from 'aws-amplify/api';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { onCreateCat } from '../../../graphql/subscriptions';
 
 
 const CreateForm = ({ setOpen, fetchCats }) => {
