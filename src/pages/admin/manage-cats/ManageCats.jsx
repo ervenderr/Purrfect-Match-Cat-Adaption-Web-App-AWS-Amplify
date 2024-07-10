@@ -12,15 +12,44 @@ const { Content } = Layout;
 
 const ManageCats = () => {
   const client = generateClient();
-  const [ cat, setCat ] = useState([]);
+  const [ catData, setCatData ] = useState([]);
+  const [ catUid, setCatUid ] = useState([]);
+  const [ urls, setUrls ] = useState([]);
   const [ open, setOpen ] = useState(false);
+  const [ updatedCatData, setUpdatedCatData ] = useState([]);
 
   const fetchCats = useCallback(async () => {
     try {
       const catsData = await client.graphql({ query: listCats });
-      const cat = catsData.data.listCats.items;
-      console.log("Cats data:", cat);
-      setCat(cat);
+      const catData = catsData.data.listCats.items;
+      const catUid = catData.map(cat => cat.image);
+
+      const urls = await Promise.all(
+        catUid.map(async (uid) => {
+          const url = await getUrl({
+            path: `public/cats/${uid}.jpeg`,
+            options: {
+              validateObjectExistence: true
+            },
+          });
+          return url.url.href;
+        })
+      );
+
+      const updatedCatData = catData.map((cat, index) => ({
+        ...cat,
+        image: urls[index]
+      }));
+
+
+
+      console.log("Updated Cats data:", updatedCatData);
+
+
+      setCatData(catData);
+      setCatUid(catUid);
+      setUrls(urls);
+      setUpdatedCatData(updatedCatData);
     } catch (error) {
       console.error("Error fetching cats:", error);
     }
@@ -116,7 +145,7 @@ const ManageCats = () => {
       </Content>
     
     <Card>
-      <Lists cat={cat} handleDelete={handleDelete} fetchCats={fetchCats} />
+      <Lists updatedCatData={updatedCatData} handleDelete={handleDelete} fetchCats={fetchCats} />
       </Card>
     </Content>
   );

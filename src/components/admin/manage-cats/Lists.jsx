@@ -5,17 +5,19 @@ import {
   Typography,
   Button,
   ConfigProvider,
+  Image,
 } from "antd";
 import { DeleteOutlined, EditOutlined} from "@ant-design/icons";
 import UpdateModal from "./UpdateModal";
 import { useState } from "react";
 import { getCat } from "../../../graphql/queries";
 import { generateClient } from "aws-amplify/api";
-import { useEffect } from "react";
+import { useEffect, useCallback } from "react";
+import { getUrl } from "aws-amplify/storage";
 
 
 
-const Lists = ({ cat, handleDelete, fetchCats }) => {
+const Lists = ({ updatedCatData, handleDelete, fetchCats }) => {
   const [form] = Form.useForm();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [currentCatData, setCurrentCatData] = useState({});
@@ -61,10 +63,11 @@ const Lists = ({ cat, handleDelete, fetchCats }) => {
       ellipsis: true,
     },
     {
-      title: "Photo",
-      dataIndex: "photo",
+      title: "Image",
+      dataIndex: "image",
       width: "15%",
       editable: true,
+      render: (image) => <Image src={image} alt="Cat" style={{ width: "50px", height: "auto" }} />,
     },
     {
       title: "operation",
@@ -107,13 +110,10 @@ const Lists = ({ cat, handleDelete, fetchCats }) => {
         <Table
         size="small"
           bordered
-          dataSource={cat}
+          dataSource={updatedCatData}
           columns={columns}
           rowClassName="editable-row"
           rowKey="id"
-          // pagination={{
-          //   onChange:,
-          // }}
         />
       </Form>
     </ConfigProvider>

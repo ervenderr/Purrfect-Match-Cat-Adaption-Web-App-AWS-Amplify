@@ -13,6 +13,19 @@ const CreateForm = ({ setOpen, fetchCats }) => {
   const client = generateClient();
   const [loadings, setLoadings] = useState();
   const [selectedFile, setSelectedFile] = useState();
+
+  useEffect(() => {
+    const createSub = client.graphql({ query: onCreateCat }).subscribe({
+      next: ({ data }) => {
+        console.log('Create Subscription data:', data);
+        fetchCats();
+      },
+      error: (error) => console.warn('Create Subscription error:', error),
+    });
+    return () => {
+      createSub.unsubscribe();
+    };
+  }, [client, fetchCats]);
   
 
   const props = {
@@ -56,19 +69,19 @@ const CreateForm = ({ setOpen, fetchCats }) => {
       console.log('Uploaded file: ', result);
 
       // Submit the form to the backend
-      // await client.graphql({
-      //   query: createCat,
-      //   variables: {
-      //     input: {
-      //       name: values.catname,
-      //       age: values.age,
-      //       breed: values.breed,
-      //       status: values.status,
-      //       description: values.description,
-      //       image: '',
-      //     }
-      //   }
-      // });
+      await client.graphql({
+        query: createCat,
+        variables: {
+          input: {
+            name: values.catname,
+            age: values.age,
+            breed: values.breed,
+            status: values.status,
+            description: values.description,
+            image: values.image.file.uid,
+          }
+        }
+      });
 
       setLoadings(true);
 
@@ -76,7 +89,7 @@ const CreateForm = ({ setOpen, fetchCats }) => {
         fetchCats();
         setLoadings(false);
         setOpen(false);
-        console.log('Valid form data:', values);
+        console.log('Valid form data:', values.image.file.uid);
         message.success('Cat created successfully');
       }, 2000);
 

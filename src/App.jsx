@@ -44,7 +44,6 @@ const ProtectedLayout = ({ collapsed, setCollapsed, colorBgContainer, adminSignO
 function App() {
   const [collapsed, setCollapsed] = useState(false);
   const [loggedIn, setLoggedIn] = useState(false);
-  const [loading, setLoading] = useState(true);
 
   const navigate = useNavigate();
 
@@ -56,7 +55,6 @@ function App() {
       } catch {
         setLoggedIn(false);
       }
-      setLoading(false);
     };
 
     checkLoggedInStatus();
@@ -76,7 +74,6 @@ function App() {
     }
   };
 
-  if (loading) return <div>Loading...</div>;
 
   return (
     <View>
