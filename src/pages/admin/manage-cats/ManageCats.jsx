@@ -1,11 +1,12 @@
 import { useEffect, useState, useCallback } from "react";
-import { Layout, Typography, Button, Card, message } from 'antd'
+import { Layout, Typography, Button, Card, message, Image } from 'antd'
 import Lists from '../../../components/admin/manage-cats/Lists';
 import CreateModal from '../../../components/admin/manage-cats/CreateModal';
 import { generateClient } from 'aws-amplify/api';
 import { listCats } from "../../../graphql/queries";
 import { deleteCat } from '../../../graphql/mutations';
 import { onCreateCat, onDeleteCat, onUpdateCat } from '../../../graphql/subscriptions';
+import { getUrl } from 'aws-amplify/storage';
 
 const { Content } = Layout;
 
@@ -28,6 +29,7 @@ const ManageCats = () => {
   useEffect(() => {
     fetchCats();
   }, [fetchCats]);
+
 
   useEffect(() => {
     const subscriptions = [];

@@ -17,6 +17,9 @@
       },
       "api": {
         "purrfectmatchcatadap": {}
+      },
+      "storage": {
+        "Cats": {}
       }
     }
   }

@@ -5,25 +5,31 @@ import { createCat } from '../../../graphql/mutations';
 import { generateClient } from 'aws-amplify/api';
 import { useState, useEffect } from 'react';
 import { onCreateCat } from '../../../graphql/subscriptions';
+import { uploadData } from 'aws-amplify/storage';
 
 
 const CreateForm = ({ setOpen, fetchCats }) => {
   const [form] = Form.useForm();
   const client = generateClient();
   const [loadings, setLoadings] = useState();
+  const [selectedFile, setSelectedFile] = useState();
+  
 
   const props = {
     beforeUpload: (file) => {
-      const isPNG = file.type === 'image/jpeg';
-      if (!isPNG) {
-        message.error(`${file.name} is not a png file`);
+      const isJPEG = file.type === 'image/jpeg';
+      if (!isJPEG) {
+        message.error(`${file.name} is not a JPEG file`);
+      } else {
+        setSelectedFile(file); // Store the file
       }
-      return isPNG || Upload.LIST_IGNORE;
+      return isJPEG || Upload.LIST_IGNORE;
     },
     onChange: (info) => {
       console.log(info.fileList);
     },
   };
+
 
   const onFinish = async (values) => {
     try {
@@ -41,20 +47,28 @@ const CreateForm = ({ setOpen, fetchCats }) => {
 
       await schema.validate(values, { abortEarly: false });
 
+      // submit the cat image to S3
+      const catImage = selectedFile;
+      const result = await uploadData({
+        path: `public/cats/${catImage.uid}.jpeg`, 
+        data: catImage,
+      }).result;
+      console.log('Uploaded file: ', result);
+
       // Submit the form to the backend
-      await client.graphql({
-        query: createCat,
-        variables: {
-          input: {
-            name: values.catname,
-            age: values.age,
-            breed: values.breed,
-            status: values.status,
-            description: values.description,
-            image: '',
-          }
-        }
-      });
+      // await client.graphql({
+      //   query: createCat,
+      //   variables: {
+      //     input: {
+      //       name: values.catname,
+      //       age: values.age,
+      //       breed: values.breed,
+      //       status: values.status,
+      //       description: values.description,
+      //       image: '',
+      //     }
+      //   }
+      // });
 
       setLoadings(true);
 
@@ -163,6 +177,7 @@ const CreateForm = ({ setOpen, fetchCats }) => {
           <Input.TextArea />
         </Form.Item>
         <Form.Item
+          valuePropName="image"
           label="Image"
           name="image"
           rules={[
