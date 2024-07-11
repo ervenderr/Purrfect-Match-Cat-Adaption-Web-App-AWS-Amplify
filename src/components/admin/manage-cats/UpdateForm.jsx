@@ -4,7 +4,7 @@ import * as yup from 'yup';
 import { updateCat } from '../../../graphql/mutations';
 import { generateClient } from 'aws-amplify/api';
 import { useState, useEffect } from 'react';
-import { uploadData } from 'aws-amplify/storage';
+import { uploadData, remove } from 'aws-amplify/storage';
 
 
 const UpdateForm = ({ setOpen, catData, fetchCats }) => {
@@ -12,6 +12,7 @@ const UpdateForm = ({ setOpen, catData, fetchCats }) => {
   const client = generateClient();
   const [loadings, setLoadings] = useState();
   const [selectedFile, setSelectedFile] = useState();
+  const [fileList, setFileList] = useState([]);
 
   
   useEffect(() => {
@@ -22,21 +23,27 @@ const UpdateForm = ({ setOpen, catData, fetchCats }) => {
         breed: catData.breed,
         status: catData.status,
         description: catData.description,
+        image: [{
+          uid: catData.id,
+          name: catData.name,
+          status: 'done',
+          url: catData.image,
+          thumbUrl: catData.image, 
+        }]
       });
+
+      setFileList([{
+        uid: catData.id,
+        name: catData.name,
+        status: 'done',
+        url: catData.image,
+        thumbUrl: catData.image, 
+      }]);
+
     }
   }, [catData, form]);
-  
-  const fileList = [
-    {
-      uid: '-1',
-      name: 'yyy.png',
-      status: 'done',
-      url: 'https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png',
-      thumbUrl: 'https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png',
-    },
-  ];
-  
 
+  
   const props = {
     beforeUpload: (file) => {
       const isJPEG = file.type === 'image/jpeg';
@@ -48,12 +55,16 @@ const UpdateForm = ({ setOpen, catData, fetchCats }) => {
       return isJPEG || Upload.LIST_IGNORE;
     },
     onChange: (info) => {
-      console.log(info.fileList);
+      setFileList(info.fileList);
     },
+    fileList,
   };
+
+
 
   const onFinish = async (values) => {
     try {
+      setLoadings(true);
       // Perform validation using yup
       const schema = yup.object().shape({
         catname: yup.string().required().min(2).max(50),
@@ -69,11 +80,30 @@ const UpdateForm = ({ setOpen, catData, fetchCats }) => {
       await schema.validate(values, { abortEarly: false });
 
       const catImage = selectedFile;
-      const result = await uploadData({
-        path: `public/cats/${catImage.uid}.jpeg`, 
+      let catuid = ''
+  
+      if(catImage != undefined){
+        catuid = catImage.uid;
+        const path = new URL(catData.image).pathname;
+        const slicedPath = path.slice(1);
+        await remove({ 
+          path: slicedPath,
+        });
+
+        const result = await uploadData({
+        path: `public/cats/${catuid}.jpeg`, 
         data: catImage,
-      }).result;
-      console.log('Uploaded file: ', result);
+        }).result;
+        console.log('Uploaded file: ', result);
+      }else{
+        const path = new URL(catData.image).pathname;
+        const segments = path.split('/');
+        const fileName = segments[segments.length - 1];
+        const uid = fileName.split('.').slice(0, -1).join('.');
+        catuid = uid;
+      }
+      // console.log('catuid ', catuid)
+
 
       // Submit the form to the backend
       await client.graphql({
@@ -86,12 +116,10 @@ const UpdateForm = ({ setOpen, catData, fetchCats }) => {
             breed: values.breed,
             status: values.status,
             description: values.description,
-            image: values.image.file.uid,
+            image: catuid,
           }
         }
       });
-
-      setLoadings(true);
 
       setTimeout(() => {
         fetchCats();
@@ -103,7 +131,7 @@ const UpdateForm = ({ setOpen, catData, fetchCats }) => {
 
     } catch (errors) {
       // Handle validation errors
-      console.log('Validation errors:', errors.errors);
+      console.error('Validation errors:', errors);
     }
   };
   
@@ -196,17 +224,10 @@ const UpdateForm = ({ setOpen, catData, fetchCats }) => {
         <Form.Item
           label="Image"
           name="image"
-          valuePropName="image"
+          valuePropName="fileList"
+          getValueFromEvent={(e) => (Array.isArray(e) ? e : e && e.fileList)}
           rules={[
-            { required: true, message: 'Please upload an image' },
-            {
-              validator: (_, value) => {
-                if (value) {
-                  return Promise.resolve();
-                }
-                return Promise.reject('File size is too large');
-              },
-            },
+            { required: true, message: 'Please upload an image' }
           ]}
         >
           <Upload {...props} listType="picture" maxCount={1} defaultFileList={fileList}>
