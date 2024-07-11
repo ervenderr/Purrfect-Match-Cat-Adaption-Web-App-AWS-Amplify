@@ -6,7 +6,7 @@ import { generateClient } from 'aws-amplify/api';
 import { listCats } from "../../../graphql/queries";
 import { deleteCat } from '../../../graphql/mutations';
 import { onCreateCat, onDeleteCat, onUpdateCat } from '../../../graphql/subscriptions';
-import { getUrl } from 'aws-amplify/storage';
+import { getUrl, remove } from 'aws-amplify/storage';
 
 const { Content } = Layout;
 
@@ -41,10 +41,7 @@ const ManageCats = () => {
         image: urls[index]
       }));
 
-
-
-      console.log("Updated Cats data:", updatedCatData);
-
+      console.log("Updated Cats data:", updatedCatData)
 
       setCatData(catData);
       setCatUid(catUid);
@@ -63,14 +60,6 @@ const ManageCats = () => {
   useEffect(() => {
     const subscriptions = [];
 
-    const createSub = client.graphql({ query: onCreateCat }).subscribe({
-      next: ({ data }) => {
-        console.log('Create Subscription data:', data);
-        fetchCats();
-      },
-      error: (error) => console.warn('Create Subscription error:', error),
-    });
-
     const deleteSub = client.graphql({ query: onDeleteCat }).subscribe({
       next: ({ data }) => {
         console.log('Delete Subscription data:', data);
@@ -87,7 +76,7 @@ const ManageCats = () => {
       error: (error) => console.warn('Update Subscription error:', error),
     });
 
-    subscriptions.push(createSub, deleteSub, updateSub);
+    subscriptions.push(deleteSub, updateSub);
 
     // Clean up subscriptions on unmount
     return () => {
@@ -95,8 +84,13 @@ const ManageCats = () => {
     };
   }, [client, fetchCats]);
 
-  const handleDelete = async (id) => {
-    console.log("Deleting key:", id);
+  const handleDelete = async (id, image) => {
+    const path = new URL(image).pathname;
+    const slicedPath = path.slice(1);
+
+    await remove({ 
+      path: slicedPath,
+    });
 
     const result = await client.graphql({
       query: deleteCat,

@@ -190,7 +190,6 @@ const CreateForm = ({ setOpen, fetchCats }) => {
           <Input.TextArea />
         </Form.Item>
         <Form.Item
-          valuePropName="image"
           label="Image"
           name="image"
           rules={[

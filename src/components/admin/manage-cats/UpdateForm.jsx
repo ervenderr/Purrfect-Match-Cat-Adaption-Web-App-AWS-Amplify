@@ -4,12 +4,14 @@ import * as yup from 'yup';
 import { updateCat } from '../../../graphql/mutations';
 import { generateClient } from 'aws-amplify/api';
 import { useState, useEffect } from 'react';
+import { uploadData } from 'aws-amplify/storage';
 
 
 const UpdateForm = ({ setOpen, catData, fetchCats }) => {
   const [form] = Form.useForm();
   const client = generateClient();
   const [loadings, setLoadings] = useState();
+  const [selectedFile, setSelectedFile] = useState();
 
   useEffect(() => {
     if (catData) {
@@ -25,11 +27,13 @@ const UpdateForm = ({ setOpen, catData, fetchCats }) => {
 
   const props = {
     beforeUpload: (file) => {
-      const isPNG = file.type === 'image/jpeg';
-      if (!isPNG) {
-        message.error(`${file.name} is not a png file`);
+      const isJPEG = file.type === 'image/jpeg';
+      if (!isJPEG) {
+        message.error(`${file.name} is not a JPEG file`);
+      } else {
+        setSelectedFile(file); // Store the file
       }
-      return isPNG || Upload.LIST_IGNORE;
+      return isJPEG || Upload.LIST_IGNORE;
     },
     onChange: (info) => {
       console.log(info.fileList);
@@ -52,6 +56,13 @@ const UpdateForm = ({ setOpen, catData, fetchCats }) => {
 
       await schema.validate(values, { abortEarly: false });
 
+      const catImage = selectedFile;
+      const result = await uploadData({
+        path: `public/cats/${catImage.uid}.jpeg`, 
+        data: catImage,
+      }).result;
+      console.log('Uploaded file: ', result);
+
       // Submit the form to the backend
       await client.graphql({
         query: updateCat,
@@ -63,7 +74,7 @@ const UpdateForm = ({ setOpen, catData, fetchCats }) => {
             breed: values.breed,
             status: values.status,
             description: values.description,
-            image: '',
+            image: values.image.file.uid,
           }
         }
       });
@@ -173,6 +184,7 @@ const UpdateForm = ({ setOpen, catData, fetchCats }) => {
         <Form.Item
           label="Image"
           name="image"
+          valuePropName="image"
           rules={[
             { required: true, message: 'Please upload an image' },
             {

@@ -86,7 +86,7 @@ const Lists = ({ updatedCatData, handleDelete, fetchCats }) => {
           </Typography.Link>
           <Popconfirm
             title="Sure to delete?"
-            onConfirm={() => handleDelete(record.id)}
+            onConfirm={() => handleDelete(record.id, record.image)}
           >
             <Button danger icon={<DeleteOutlined />} />
           </Popconfirm>
