@@ -24,9 +24,27 @@ const Lists = ({ updatedCatData, handleDelete, fetchCats }) => {
   const client = generateClient();
 
 
-  const showModal = (id, name, age, breed, status, description) => {
+  const showModal = async(id, name, age, breed, status, description, image) => {
     setIsModalOpen(true);
-    setCurrentCatData({"id": id, "name": name, 'age': age, 'breed': breed, 'status': status, 'description': description});
+    
+    setCurrentCatData(
+      {"id": id, "name": name, 'age': age, 'breed': breed, 'status': status, 
+        'description': description, 'image': image}
+    );
+    const path = new URL(image).pathname;
+    const slicedPath = path.slice(1);
+
+    const segments = path.split('/');
+    const fileName = segments[segments.length - 1];
+    const uid = fileName.split('.').slice(0, -1).join('.');
+
+    const url = await getUrl({
+      path: slicedPath,
+      options: {
+        validateObjectExistence: true
+      },
+    });
+  
   };
 
 
@@ -79,7 +97,7 @@ const Lists = ({ updatedCatData, handleDelete, fetchCats }) => {
           >
             <Button 
             primary="true" 
-            onClick={() => showModal(record.id, record.name, record.age, record.breed, record.status, record.description)} 
+            onClick={() => showModal(record.id, record.name, record.age, record.breed, record.status, record.description, record.image)} 
             style={{ marginRight: "5px" }} icon={<EditOutlined 
             />} />
             <UpdateModal isModalOpen={isModalOpen} setIsModalOpen={setIsModalOpen} catData={currentCatData} fetchCats={fetchCats} />

@@ -101,7 +101,9 @@ const ManageCats = () => {
       }
     });
     fetchCats();
-    message.success("Cat deleted successfully");
+    setTimeout(() => {
+      message.success("Cat deleted successfully");
+    }, 0);
   }
 
   const showModal = () => {

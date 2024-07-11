@@ -13,6 +13,7 @@ const UpdateForm = ({ setOpen, catData, fetchCats }) => {
   const [loadings, setLoadings] = useState();
   const [selectedFile, setSelectedFile] = useState();
 
+  
   useEffect(() => {
     if (catData) {
       form.setFieldsValue({
@@ -24,6 +25,17 @@ const UpdateForm = ({ setOpen, catData, fetchCats }) => {
       });
     }
   }, [catData, form]);
+  
+  const fileList = [
+    {
+      uid: '-1',
+      name: 'yyy.png',
+      status: 'done',
+      url: 'https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png',
+      thumbUrl: 'https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png',
+    },
+  ];
+  
 
   const props = {
     beforeUpload: (file) => {
@@ -197,7 +209,7 @@ const UpdateForm = ({ setOpen, catData, fetchCats }) => {
             },
           ]}
         >
-          <Upload {...props}>
+          <Upload {...props} listType="picture" maxCount={1} defaultFileList={fileList}>
             <Button icon={<UploadOutlined />}>Click to Upload</Button>
           </Upload>
         </Form.Item>

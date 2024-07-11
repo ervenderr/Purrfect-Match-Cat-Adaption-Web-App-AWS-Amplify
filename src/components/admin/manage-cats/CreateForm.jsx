@@ -34,7 +34,7 @@ const CreateForm = ({ setOpen, fetchCats }) => {
       if (!isJPEG) {
         message.error(`${file.name} is not a JPEG file`);
       } else {
-        setSelectedFile(file); // Store the file
+        setSelectedFile(file);
       }
       return isJPEG || Upload.LIST_IGNORE;
     },
@@ -45,6 +45,7 @@ const CreateForm = ({ setOpen, fetchCats }) => {
 
 
   const onFinish = async (values) => {
+    setLoadings(true);
     try {
       // Perform validation using yup
       const schema = yup.object().shape({
@@ -82,13 +83,12 @@ const CreateForm = ({ setOpen, fetchCats }) => {
           }
         }
       });
-
-      setLoadings(true);
+      fetchCats();
 
       setTimeout(() => {
-        fetchCats();
         setLoadings(false);
         setOpen(false);
+        form.resetFields()
         console.log('Valid form data:', values.image.file.uid);
         message.success('Cat created successfully');
       }, 2000);
@@ -190,6 +190,7 @@ const CreateForm = ({ setOpen, fetchCats }) => {
           <Input.TextArea />
         </Form.Item>
         <Form.Item
+          valuePropName="image"
           label="Image"
           name="image"
           rules={[
@@ -204,7 +205,7 @@ const CreateForm = ({ setOpen, fetchCats }) => {
             },
           ]}
         >
-          <Upload {...props}>
+          <Upload {...props} listType="picture" maxCount={1}>
             <Button icon={<UploadOutlined />}>Click to Upload</Button>
           </Upload>
         </Form.Item>
