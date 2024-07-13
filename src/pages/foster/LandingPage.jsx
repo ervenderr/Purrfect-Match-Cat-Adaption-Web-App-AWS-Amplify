@@ -1,91 +1,177 @@
-import React, { useEffect, useState } from 'react';
-import { Button, Card, Image, Typography, Switch } from 'antd';
-import { list, getUrl } from 'aws-amplify/storage';
+import { useEffect, useState, useCallback } from "react";
+import { Button, Card, Image, Typography, Layout, Row, Col, Menu, Drawer } from "antd";
+import { list, getUrl } from "aws-amplify/storage";
+import { listCats } from "../../../src/graphql/queries";
+import { generateClient } from "aws-amplify/api";
+import HeroBg from "../../assets/hero-bg.jpg";
+import { MenuOutlined } from "@ant-design/icons";
 
-const { Title } = Typography;
+const { Title, Paragraph } = Typography;
+const { Meta } = Card;
+const { Header, Content, Footer } = Layout;
+
+const client = generateClient();
 
 const LandingPage = () => {
-    const [imagePath, setImagePath] = useState([]);
-    const [catImages, setCatImages] = useState([]);
-    const [loading, setLoading] = useState(true);
-    const onChange = (checked) => {
-        setLoading(!checked);
-      };
-    
+  const [loading, setLoading] = useState(true);
+  const [catData, setCatData] = useState([]);
+  const [updatedCatData, setUpdatedCatData] = useState([]);
+  const onChange = (checked) => {
+    setLoading(!checked);
+  };
+
+  const [open, setOpen] = useState(false);
+  const showDrawer = () => {
+    setOpen(true);
+  };
+  const onClose = () => {
+    setOpen(false);
+  };
 
 
-    useEffect(() => {
-        const handleGetPath = async () => {
-            setLoading(true);
-            try {
-                const paths = await list({
-                    path: 'public/cats/',
-                    options: {
-                        listAll: true,
-                        validateObjectExistence: true
-                    },
-                });
-                const pathsArray = paths.items.map((item) => item.path);
-                setImagePath(pathsArray);
-            } catch (error) {
-                console.error('Error fetching Path:', error);
-            }
-        };
+  const fetchCats = useCallback(async () => {
+    try {
+      const catsData = await client.graphql({ query: listCats });
+      const catData = catsData.data.listCats.items;
+      const catUid = catData.map((cat) => cat.image);
 
-        handleGetPath();
-    }, []);
+      const urls = await Promise.all(
+        catUid.map(async (uid) => {
+          const url = await getUrl({
+            path: `public/cats/${uid}.jpeg`,
+            options: {
+              validateObjectExistence: true,
+            },
+          });
+          return url.url.href;
+        })
+      );
 
-    useEffect(() => {
-        const handleGetUrl = async () => {
-            try {
-                const urls = await Promise.all(
-                    imagePath.map(async (path) => {
-                        const url = await getUrl({
-                            path,
-                            options: {
-                                validateObjectExistence: true
-                            },
-                        });
-                        return url.url;
-                    })
-                );
-                setCatImages(urls);
-            } catch (error) {
-                console.error('Error fetching URLs:', error);
-            }finally {
-                setLoading(false);
-            }
-        };
+      const updatedCatData = catData.map((cat, index) => ({
+        ...cat,
+        image: urls[index],
+      }));
 
-        if (imagePath.length > 0) {
-            handleGetUrl();
-        }
-    }, [imagePath]);
+      setCatData(catData);
+      setUpdatedCatData(updatedCatData);
+      setLoading(false);
+    } catch (error) {
+      console.error("Error fetching cats:", error);
+    }
+  }, []);
 
-    console.log('catImages:', catImages);
+  useEffect(() => {
+    fetchCats();
+  }, [fetchCats]);
 
-    return (
-        <div style={{ textAlign: 'center', marginTop: '100px' }}>
-            <Title level={2}>Welcome to Purrfect Match Cat Adoption Web App</Title>
-            <Button type="primary" size="large">Get Started</Button>
-            <div style={{ display: 'flex', justifyContent: 'center', marginTop: '50px' }}>
-                {!loading ? 
-                catImages.map((image, index) => (
-                    <Card key={index} loading={loading} style={{
-                        width: 300,
-                        marginTop: 16,
-                    }}>
-                        <Image src={image} width={200} height={200} />
-                    </Card>
-                ))
-                :  <Card loading={loading} style={{
-                    width: 300,
-                    height: 300,
-                    marginTop: 16,
-                }}></Card>}
-            </div>
+  return (
+    <Layout
+      style={{
+        height: "100vh",
+        background: "rgba(255, 255, 255, 0.8)",
+      }}
+    >
+        
+      <Header collapsible
+      style={{
+        position: 'sticky',
+        top: 0,
+        zIndex: 1,
+        width: '100%',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+      }}
+      >
+        <div className="demo-logo" style={{ color: "white" }}>
+            PurrfectMatch
         </div>
-    );
+
+        <Menu theme="dark" mode="horizontal"  defaultSelectedKeys={["1"]} style={{ lineHeight: '34px' }} breakpoint="lg" collapsedWidth="0"
+>
+          <Menu.Item key="1">Home</Menu.Item>
+          <Menu.Item key="2">About</Menu.Item>
+          <Menu.Item key="3">Contact</Menu.Item>
+        </Menu>
+        
+      </Header>
+      
+      <Content
+        style={{
+          padding: "0 24px",
+          minHeight: "100vh",
+          backgroundImage: `url(${HeroBg})`,
+          backgroundSize: "cover",
+          backgroundPosition: "center",
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+        }}
+      >
+        <Row
+          style={{
+            maxWidth: "1200px",
+            width: "100%",
+            padding: "24px",
+            borderRadius: "8px",
+            height: "100%",
+            alignItems: "center",
+            justifyContent: "center",
+          }}
+        >
+          <Col
+            xs={24}
+            sm={18}
+            md={14}
+            style={{
+              padding: "24px",
+              borderRadius: "8px",
+              boxShadow: "0 0 20px rgba(0, 0, 0, 0.2)",
+              textAlign: "center",
+            }}
+          >
+            <Title
+              style={{
+                color: "#00152a",
+                marginBottom: "24px",
+                fontSize: "36px",
+                fontWeight: "bold",
+                textShadow: "2px 2px 4px rgba(0, 0, 0, 0.2)",
+              }}
+              level={1}
+            >
+              Welcome to Purrfect Match Cat Adoption!
+            </Title>
+            <Paragraph
+              style={{
+                color: "#00152a",
+                marginBottom: "24px",
+                fontSize: "16px",
+                textShadow: "2px 2px 4px rgba(0, 0, 0, 0.2)",
+              }}
+            >
+              Find your perfect feline companion and give a cat a loving home.
+              Browse through our list of adorable cats ready for adoption.
+            </Paragraph>
+            <Button
+              type="primary"
+              style={{
+                color: "#fff",
+                borderRadius: "8px",
+                padding: "22px 24px",
+                fontSize: "16px",
+                fontWeight: "bold",
+                boxShadow: "0 0 20px rgba(0, 0, 0, 0.2)",
+              }}
+            >
+              Adopt Now
+            </Button>
+          </Col>
+        </Row>
+      </Content>
+      <Footer>c</Footer>
+    </Layout>
+  );
 };
 
 export default LandingPage;
