@@ -5,6 +5,8 @@ import { listCats } from "../../../src/graphql/queries";
 import { generateClient } from "aws-amplify/api";
 import HeroBg from "../../assets/hero-bg.jpg";
 import { MenuOutlined } from "@ant-design/icons";
+import TopNav from "../../components/foster/global/TopNav";
+import LandingPageFooter from "../../components/foster/global/LandingPageFooter";
 
 const { Title, Paragraph } = Typography;
 const { Meta } = Card;
@@ -71,35 +73,13 @@ const LandingPage = () => {
         background: "rgba(255, 255, 255, 0.8)",
       }}
     >
-        
-      <Header collapsible
-      style={{
-        position: 'sticky',
-        top: 0,
-        zIndex: 1,
-        width: '100%',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'space-between',
-      }}
-      >
-        <div className="demo-logo" style={{ color: "white" }}>
-            PurrfectMatch
-        </div>
-
-        <Menu theme="dark" mode="horizontal"  defaultSelectedKeys={["1"]} style={{ lineHeight: '34px' }} breakpoint="lg" collapsedWidth="0"
->
-          <Menu.Item key="1">Home</Menu.Item>
-          <Menu.Item key="2">About</Menu.Item>
-          <Menu.Item key="3">Contact</Menu.Item>
-        </Menu>
-        
-      </Header>
+    
+    <TopNav />
       
       <Content
         style={{
-          padding: "0 24px",
-          minHeight: "100vh",
+          padding: "0 8px",
+        //   minHeight: "100svh",
           backgroundImage: `url(${HeroBg})`,
           backgroundSize: "cover",
           backgroundPosition: "center",
@@ -140,14 +120,15 @@ const LandingPage = () => {
               }}
               level={1}
             >
-              Welcome to Purrfect Match Cat Adoption!
+              Welcome to <span style={{color: '#00b96c'}}>PurrfectMatch</span> Cat Adoption!
             </Title>
             <Paragraph
               style={{
                 color: "#00152a",
                 marginBottom: "24px",
                 fontSize: "16px",
-                textShadow: "2px 2px 4px rgba(0, 0, 0, 0.2)",
+                textShadow: "2px 2px 4px rgba(0, 0, 0, 0.7)",
+                
               }}
             >
               Find your perfect feline companion and give a cat a loving home.
@@ -169,7 +150,9 @@ const LandingPage = () => {
           </Col>
         </Row>
       </Content>
-      <Footer>c</Footer>
+
+
+      <LandingPageFooter />
     </Layout>
   );
 };
