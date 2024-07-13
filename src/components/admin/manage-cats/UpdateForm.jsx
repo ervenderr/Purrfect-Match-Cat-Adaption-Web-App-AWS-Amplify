@@ -102,8 +102,6 @@ const UpdateForm = ({ setOpen, catData, fetchCats }) => {
         const uid = fileName.split('.').slice(0, -1).join('.');
         catuid = uid;
       }
-      // console.log('catuid ', catuid)
-
 
       // Submit the form to the backend
       await client.graphql({
