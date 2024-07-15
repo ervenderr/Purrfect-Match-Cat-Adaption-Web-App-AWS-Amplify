@@ -64,7 +64,8 @@ const CreateForm = ({ setOpen, fetchCats }) => {
       // submit the cat image to S3
       const catImage = selectedFile;
       const result = await uploadData({
-        path: `public/cats/${catImage.uid}.jpeg`, 
+        // path: `public/cats/${catImage.uid}.jpeg`, 
+        path: ({identityId}) => `protected/${identityId}/cats/${catImage.uid}.jpeg`,
         data: catImage,
       }).result;
       console.log('Uploaded file: ', result);
@@ -80,8 +81,8 @@ const CreateForm = ({ setOpen, fetchCats }) => {
             status: values.status,
             description: values.description,
             image: values.image.file.uid,
-          }
-        }
+          }},
+        authMode: 'userPool'
       });
       fetchCats();
 

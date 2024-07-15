@@ -11,12 +11,14 @@ import { getUrl, remove } from 'aws-amplify/storage';
 const { Content } = Layout;
 
 const ManageCats = () => {
+
   const client = generateClient();
   const [ catData, setCatData ] = useState([]);
   const [ catUid, setCatUid ] = useState([]);
   const [ urls, setUrls ] = useState([]);
   const [ open, setOpen ] = useState(false);
   const [ updatedCatData, setUpdatedCatData ] = useState([]);
+
 
   const fetchCats = useCallback(async () => {
     try {
@@ -27,9 +29,9 @@ const ManageCats = () => {
       const urls = await Promise.all(
         catUid.map(async (uid) => {
           const url = await getUrl({
-            path: `public/cats/${uid}.jpeg`,
+            path: ({identityId}) => `protected/${identityId}/cats/${uid}.jpeg`,
             options: {
-              validateObjectExistence: true
+              level: 'Protected',
             },
           });
           return url.url.href;
@@ -86,19 +88,20 @@ const ManageCats = () => {
 
   const handleDelete = async (id, image) => {
     const path = new URL(image).pathname;
-    const slicedPath = path.slice(1);
+    const segments = path.split('/');
+    const fileName = segments[segments.length - 1];
 
     await remove({ 
-      path: slicedPath,
+      path: ({identityId}) => `protected/${identityId}/cats/${fileName}`,
+      options: {
+        level: 'Protected',
+      },
     });
 
-    const result = await client.graphql({
+    await client.graphql({
       query: deleteCat,
-      variables: {
-        input: {
-          id: id
-        }
-      }
+      variables: {input: {id: id}},
+      authMode: 'userPool'
     });
     fetchCats();
     setTimeout(() => {

@@ -8,6 +8,21 @@ const { Header } = Layout;
 
 const TopNav = () => {
 
+  const menuItems = [
+    {
+      key: '1',
+      label: 'Home',
+    },
+    {
+      key: '2',
+      label: 'About',
+    },
+    {
+      key: '3',
+      label: 'Contact',
+    },
+  ];
+
     return (
       <Header 
       style={{
@@ -25,11 +40,14 @@ const TopNav = () => {
             <span style={{fontSize: '20px'}} >PurrfectMatch</span>
         </div>
 
-        <Menu theme="dark" mode="horizontal"  defaultSelectedKeys={["1"]} style={{ lineHeight: '34px' }} breakpoint="lg" collapsedWidth="0"
->
-          <Menu.Item key="1">Home</Menu.Item>
-          <Menu.Item key="2">About</Menu.Item>
-          <Menu.Item key="3">Contact</Menu.Item>
+        <Menu 
+        theme="dark" 
+        mode="horizontal"  
+        defaultSelectedKeys={["1"]} 
+        style={{ lineHeight: '34px' }} 
+        breakpoint="lg" 
+        items={menuItems}
+        collapsedWidth="0">
         </Menu>
         
       </Header>

@@ -11,7 +11,7 @@ const useAuthCheck = () => {
       try {
         const session = await fetchAuthSession();
         const token = session.tokens.accessToken.toString();
-        // console.log('AccessToken:', token);
+        console.log('AccessToken:', session);
         // navigate('/dashboard');
       } catch (error) {
         console.error('No current user:', error);

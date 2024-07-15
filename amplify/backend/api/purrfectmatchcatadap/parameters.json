@@ -1,5 +1,12 @@
 {
   "AppSyncApiName": "purrfectmatchcatadap",
   "DynamoDBBillingMode": "PAY_PER_REQUEST",
-  "DynamoDBEnableServerSideEncryption": false
+  "DynamoDBEnableServerSideEncryption": false,
+  "AuthCognitoUserPoolId": {
+    "Fn::GetAtt": [
+      "authpurrfectmatchcatadapbfd068b1",
+      "Outputs.UserPoolId"
+    ]
+  },
+  "AuthModeLastUpdated": "2024-07-15T00:30:43.812Z"
 }

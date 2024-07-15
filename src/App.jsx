@@ -85,7 +85,7 @@ function App() {
               <Route
                 path="*"
                 element={
-                <Authenticator components={components} socialProviders={['google']}>
+                <Authenticator loginMechanisms={['email']} components={components} socialProviders={['google']} hideSignUp >
                   <ProtectedLayout
                     collapsed={collapsed}
                     setCollapsed={setCollapsed}

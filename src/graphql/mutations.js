@@ -16,6 +16,7 @@ export const createCat = /* GraphQL */ `
       image
       createdAt
       updatedAt
+      owner
       __typename
     }
   }
@@ -35,6 +36,7 @@ export const updateCat = /* GraphQL */ `
       image
       createdAt
       updatedAt
+      owner
       __typename
     }
   }
@@ -54,6 +56,7 @@ export const deleteCat = /* GraphQL */ `
       image
       createdAt
       updatedAt
+      owner
       __typename
     }
   }

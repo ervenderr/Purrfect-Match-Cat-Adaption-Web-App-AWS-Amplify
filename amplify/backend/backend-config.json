@@ -1,15 +1,32 @@
 {
   "api": {
     "purrfectmatchcatadap": {
-      "dependsOn": [],
+      "dependsOn": [
+        {
+          "attributes": [
+            "UserPoolId"
+          ],
+          "category": "auth",
+          "resourceName": "purrfectmatchcatadapbfd068b1"
+        }
+      ],
       "output": {
         "authConfig": {
-          "additionalAuthenticationProviders": [],
+          "additionalAuthenticationProviders": [
+            {
+              "apiKeyConfig": {
+                "apiKeyExpirationDate": "2024-07-22T00:49:51.590Z",
+                "apiKeyExpirationDays": 7,
+                "description": "managecat"
+              },
+              "authenticationType": "API_KEY"
+            }
+          ],
           "defaultAuthentication": {
-            "apiKeyConfig": {
-              "apiKeyExpirationDays": 7
-            },
-            "authenticationType": "API_KEY"
+            "authenticationType": "AMAZON_COGNITO_USER_POOLS",
+            "userPoolConfig": {
+              "userPoolId": "authpurrfectmatchcatadapbfd068b1"
+            }
           }
         }
       },
@@ -18,7 +35,7 @@
     }
   },
   "auth": {
-    "purrfectmatchcatadap3706e259": {
+    "purrfectmatchcatadapbfd068b1": {
       "customAuth": false,
       "dependsOn": [],
       "frontendAuthConfig": {
@@ -45,6 +62,7 @@
       "service": "Cognito"
     }
   },
+  "function": {},
   "storage": {
     "Cats": {
       "dependsOn": [],

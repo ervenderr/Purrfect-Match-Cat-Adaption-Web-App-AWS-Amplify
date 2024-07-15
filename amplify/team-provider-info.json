@@ -12,14 +12,14 @@
       "AmplifyAppId": "doqefy8duc035"
     },
     "categories": {
-      "auth": {
-        "purrfectmatchcatadap3706e259": {}
-      },
       "api": {
         "purrfectmatchcatadap": {}
       },
       "storage": {
         "Cats": {}
+      },
+      "auth": {
+        "purrfectmatchcatadapbfd068b1": {}
       }
     }
   }

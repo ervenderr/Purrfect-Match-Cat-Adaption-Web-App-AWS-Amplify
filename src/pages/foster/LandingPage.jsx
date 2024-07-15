@@ -7,6 +7,8 @@ import HeroBg from "../../assets/hero-bg.jpg";
 import { MenuOutlined } from "@ant-design/icons";
 import TopNav from "../../components/foster/global/TopNav";
 import LandingPageFooter from "../../components/foster/global/LandingPageFooter";
+import { deleteCat } from "../../../src/graphql/mutations";
+
 
 const { Title, Paragraph } = Typography;
 const { Meta } = Card;
@@ -29,6 +31,7 @@ const LandingPage = () => {
   const onClose = () => {
     setOpen(false);
   };
+
 
 
   const fetchCats = useCallback(async () => {

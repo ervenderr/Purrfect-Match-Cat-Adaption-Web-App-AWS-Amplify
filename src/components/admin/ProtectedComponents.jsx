@@ -5,9 +5,13 @@ import AdoptionRequest from '../../pages/admin/adoption-request/AdoptionRequest'
 import Users from '../../pages/admin/users/Users';
 import useAuthCheck from './utils/useAuthCheck';
 
-const withAuthCheck = (Component) => () => {
-  useAuthCheck();
-  return <Component />;
+const withAuthCheck = (Component) => {
+  const AuthCheckedComponent = () => {
+    useAuthCheck();
+    return <Component />;
+  };
+  AuthCheckedComponent.displayName = `withAuthCheck(${Component.displayName || Component.name})`;
+  return AuthCheckedComponent;
 };
 
 const ProtectedDashboard = withAuthCheck(Dashboard);
