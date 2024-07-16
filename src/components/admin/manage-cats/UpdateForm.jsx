@@ -81,30 +81,18 @@ const UpdateForm = ({ setOpen, catData, fetchCats }) => {
 
       const catImage = selectedFile;
       let catuid = ''
+      const path = new URL(catData.image).pathname;
+      const segments = path.split('/');
+      const fileName = segments[segments.length - 1];
+      const uid = fileName.split('.').slice(0, -1).join('.');
+      catuid = uid;
   
       if(catImage != undefined){
-        catuid = catImage.uid;
-        const path = new URL(catData.image).pathname;
-        const segments = path.split('/');
-        const fileName = segments[segments.length - 1];
-        await remove({ 
-          path: ({identityId}) => `protected/${identityId}/cats/${fileName}`,
-          options: {
-            level: 'Protected',
-          },
-        });
-
         const result = await uploadData({
-        path: ({identityId}) => `protected/${identityId}/cats/${catuid}.jpeg`,
+        path: `public/cats/${catuid}.jpeg`, 
         data: catImage,
         }).result;
         console.log('Uploaded file: ', result);
-      }else{
-        const path = new URL(catData.image).pathname;
-        const segments = path.split('/');
-        const fileName = segments[segments.length - 1];
-        const uid = fileName.split('.').slice(0, -1).join('.');
-        catuid = uid;
       }
 
       // Submit the form to the backend

@@ -29,7 +29,8 @@ const ManageCats = () => {
       const urls = await Promise.all(
         catUid.map(async (uid) => {
           const url = await getUrl({
-            path: ({identityId}) => `protected/${identityId}/cats/${uid}.jpeg`,
+            // path: ({identityId}) => `protected/${identityId}/cats/${uid}.jpeg`,
+            path: `public/cats/${uid}.jpeg`, 
             options: {
               level: 'protected',
             },
@@ -62,6 +63,14 @@ const ManageCats = () => {
   useEffect(() => {
     const subscriptions = [];
 
+    const createSub = client.graphql({ query: onCreateCat }).subscribe({
+      next: ({ data }) => {
+        console.log('Create Subscription data:', data);
+        fetchCats();
+      },
+      error: (error) => console.warn('Create Subscription error:', error),
+    });
+
     const deleteSub = client.graphql({ query: onDeleteCat }).subscribe({
       next: ({ data }) => {
         console.log('Delete Subscription data:', data);
@@ -78,7 +87,7 @@ const ManageCats = () => {
       error: (error) => console.warn('Update Subscription error:', error),
     });
 
-    subscriptions.push(deleteSub, updateSub);
+    subscriptions.push(createSub, deleteSub, updateSub);
 
     // Clean up subscriptions on unmount
     return () => {
@@ -109,9 +118,9 @@ const ManageCats = () => {
         message.success("Cat deleted successfully");
       }, 0);
     } catch (error) {
-      console.error(error);
+      // console.error("Error deleting cat:", error.message);
       setTimeout(() => {
-        message.error('Access Denied');
+        message.error(error.message);
       }, 0);
     }
 

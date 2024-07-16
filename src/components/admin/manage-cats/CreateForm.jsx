@@ -14,20 +14,6 @@ const CreateForm = ({ setOpen, fetchCats }) => {
   const [loadings, setLoadings] = useState();
   const [selectedFile, setSelectedFile] = useState();
 
-  useEffect(() => {
-    const createSub = client.graphql({ query: onCreateCat }).subscribe({
-      next: ({ data }) => {
-        console.log('Create Subscription data:', data);
-        fetchCats();
-      },
-      error: (error) => console.warn('Create Subscription error:', error),
-    });
-    return () => {
-      createSub.unsubscribe();
-    };
-  }, [client, fetchCats]);
-  
-
   const props = {
     beforeUpload: (file) => {
       const isJPEG = file.type === 'image/jpeg';
@@ -64,8 +50,8 @@ const CreateForm = ({ setOpen, fetchCats }) => {
       // submit the cat image to S3
       const catImage = selectedFile;
       const result = await uploadData({
-        // path: `public/cats/${catImage.uid}.jpeg`, 
-        path: ({identityId}) => `protected/${identityId}/cats/${catImage.uid}.jpeg`,
+        path: `public/cats/${catImage.uid}.jpeg`, 
+        // path: ({identityId}) => `protected/${identityId}/cats/${catImage.uid}.jpeg`,
         data: catImage,
       }).result;
       console.log('Uploaded file: ', result);
