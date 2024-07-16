@@ -4,7 +4,11 @@
 
 type Cat 
 @model 
-@auth(rules: [{ allow: public, operations: [read] }, { allow: owner }]) {
+@auth(rules: [
+  { allow: public, operations: [read] }, 
+  { allow: groups, groups: ["Admins"] }, 
+  { allow: groups, groups: ["Editors"], operations: [create, read, update] }
+  ]) {
   id: ID!
   name: String!
   breed: String!

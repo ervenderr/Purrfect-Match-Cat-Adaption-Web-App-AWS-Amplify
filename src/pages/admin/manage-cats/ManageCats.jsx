@@ -22,7 +22,7 @@ const ManageCats = () => {
 
   const fetchCats = useCallback(async () => {
     try {
-      const catsData = await client.graphql({ query: listCats });
+      const catsData = await client.graphql({ query: listCats , authMode: 'userPool'});
       const catData = catsData.data.listCats.items;
       const catUid = catData.map(cat => cat.image);
 
@@ -31,7 +31,7 @@ const ManageCats = () => {
           const url = await getUrl({
             path: ({identityId}) => `protected/${identityId}/cats/${uid}.jpeg`,
             options: {
-              level: 'Protected',
+              level: 'protected',
             },
           });
           return url.url.href;
@@ -43,7 +43,7 @@ const ManageCats = () => {
         image: urls[index]
       }));
 
-      console.log("Updated Cats data:", updatedCatData)
+      // console.log("Updated Cats data:", urls)
 
       setCatData(catData);
       setCatUid(catUid);
@@ -91,22 +91,31 @@ const ManageCats = () => {
     const segments = path.split('/');
     const fileName = segments[segments.length - 1];
 
-    await remove({ 
-      path: ({identityId}) => `protected/${identityId}/cats/${fileName}`,
-      options: {
-        level: 'Protected',
-      },
-    });
+    try {
+      await remove({ 
+        path: ({identityId}) => `protected/${identityId}/cats/${fileName}`,
+        options: {
+          level: 'protected',
+        },
+      });
+  
+      await client.graphql({
+        query: deleteCat,
+        variables: {input: {id: id}},
+        authMode: 'userPool'
+      });
+      fetchCats();
+      setTimeout(() => {
+        message.success("Cat deleted successfully");
+      }, 0);
+    } catch (error) {
+      console.error(error);
+      setTimeout(() => {
+        message.error('Access Denied');
+      }, 0);
+    }
 
-    await client.graphql({
-      query: deleteCat,
-      variables: {input: {id: id}},
-      authMode: 'userPool'
-    });
-    fetchCats();
-    setTimeout(() => {
-      message.success("Cat deleted successfully");
-    }, 0);
+    
   }
 
   const showModal = () => {

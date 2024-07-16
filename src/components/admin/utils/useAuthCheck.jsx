@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { fetchAuthSession } from 'aws-amplify/auth';
+import { fetchAuthSession, getCurrentUser  } from 'aws-amplify/auth';
 import { useNavigate, useLocation } from 'react-router-dom';
 
 const useAuthCheck = () => {
@@ -10,9 +10,10 @@ const useAuthCheck = () => {
     const checkCurrentUser = async () => {
       try {
         const session = await fetchAuthSession();
-        const token = session.tokens.accessToken.toString();
+        // const user = await getCurrentUser();
         console.log('AccessToken:', session);
-        // navigate('/dashboard');
+        // console.log('user:', user);
+        // // navigate('/dashboard');
       } catch (error) {
         console.error('No current user:', error);
           navigate('/dashboard');

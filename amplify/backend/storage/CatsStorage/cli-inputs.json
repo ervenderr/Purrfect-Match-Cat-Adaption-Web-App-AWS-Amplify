@@ -1,0 +1,24 @@
+{
+  "resourceName": "CatsStorage",
+  "policyUUID": "e7ef73b7",
+  "bucketName": "purrfectmatchcatadap1336497a3c054694b34189df4ab",
+  "storageAccess": "authAndGuest",
+  "guestAccess": [
+    "READ"
+  ],
+  "authAccess": [
+    "CREATE_AND_UPDATE",
+    "READ"
+  ],
+  "groupAccess": {
+    "Admins": [
+      "CREATE_AND_UPDATE",
+      "READ",
+      "DELETE"
+    ],
+    "Editors": [
+      "CREATE_AND_UPDATE",
+      "READ"
+    ]
+  }
+}

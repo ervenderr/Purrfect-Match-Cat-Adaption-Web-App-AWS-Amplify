@@ -13,13 +13,21 @@
     },
     "categories": {
       "api": {
-        "purrfectmatchcatadap": {}
-      },
-      "storage": {
-        "Cats": {}
+        "purrfectmatchcatadap": {},
+        "AdminQueries": {}
       },
       "auth": {
-        "purrfectmatchcatadapbfd068b1": {}
+        "purrfectmatchcatadapbfd068b1": {},
+        "userPoolGroups": {}
+      },
+      "storage": {
+        "CatsStorage": {}
+      },
+      "function": {
+        "AdminQueriesa9a5b5b6": {
+          "deploymentBucketName": "amplify-purrfectmatchcatadap-dev-ec88d-deployment",
+          "s3Key": "amplify-builds/AdminQueriesa9a5b5b6-785144666735682b5956-build.zip"
+        }
       }
     }
   }

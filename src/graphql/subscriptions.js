@@ -2,11 +2,8 @@
 // this is an auto generated file. This will be overwritten
 
 export const onCreateCat = /* GraphQL */ `
-  subscription OnCreateCat(
-    $filter: ModelSubscriptionCatFilterInput
-    $owner: String
-  ) {
-    onCreateCat(filter: $filter, owner: $owner) {
+  subscription OnCreateCat($filter: ModelSubscriptionCatFilterInput) {
+    onCreateCat(filter: $filter) {
       id
       name
       breed
@@ -16,17 +13,13 @@ export const onCreateCat = /* GraphQL */ `
       image
       createdAt
       updatedAt
-      owner
       __typename
     }
   }
 `;
 export const onUpdateCat = /* GraphQL */ `
-  subscription OnUpdateCat(
-    $filter: ModelSubscriptionCatFilterInput
-    $owner: String
-  ) {
-    onUpdateCat(filter: $filter, owner: $owner) {
+  subscription OnUpdateCat($filter: ModelSubscriptionCatFilterInput) {
+    onUpdateCat(filter: $filter) {
       id
       name
       breed
@@ -36,17 +29,13 @@ export const onUpdateCat = /* GraphQL */ `
       image
       createdAt
       updatedAt
-      owner
       __typename
     }
   }
 `;
 export const onDeleteCat = /* GraphQL */ `
-  subscription OnDeleteCat(
-    $filter: ModelSubscriptionCatFilterInput
-    $owner: String
-  ) {
-    onDeleteCat(filter: $filter, owner: $owner) {
+  subscription OnDeleteCat($filter: ModelSubscriptionCatFilterInput) {
+    onDeleteCat(filter: $filter) {
       id
       name
       breed
@@ -56,7 +45,6 @@ export const onDeleteCat = /* GraphQL */ `
       image
       createdAt
       updatedAt
-      owner
       __typename
     }
   }

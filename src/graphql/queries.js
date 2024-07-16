@@ -13,7 +13,6 @@ export const getCat = /* GraphQL */ `
       image
       createdAt
       updatedAt
-      owner
       __typename
     }
   }
@@ -35,7 +34,6 @@ export const listCats = /* GraphQL */ `
         image
         createdAt
         updatedAt
-        owner
         __typename
       }
       nextToken
