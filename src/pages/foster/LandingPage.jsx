@@ -1,5 +1,5 @@
 import { useEffect, useState, useCallback } from "react";
-import { Button, Card, Image, Typography, Layout, Row, Col, Menu, Drawer } from "antd";
+import { Button, Card, Image, Typography, Layout, Row, Col, Menu, Drawer, Space } from "antd";
 import { list, getUrl } from "aws-amplify/storage";
 import { listCats } from "../../../src/graphql/queries";
 import { generateClient } from "aws-amplify/api";
@@ -75,19 +75,18 @@ const LandingPage = () => {
   return (
     <Layout
       style={{
-        height: "100vh",
-        background: "rgba(255, 255, 255, 0.8)",
+        // height: "100vh",
       }}>
-    
-      {/* <TopNav /> */}
-      
-      <Hero />
-      <About />
-      <Cats />
-      
+      <TopNav />
 
-
-      <LandingPageFooter />
+      <Content style={{
+        height: '100vh',
+        width: '100%',
+      }}>
+        <Hero />
+        <About />
+        <LandingPageFooter />
+      </Content>
     </Layout>
   );
 };

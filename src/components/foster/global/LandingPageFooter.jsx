@@ -7,7 +7,7 @@ const LandingPageFooter = () => {
   return (
     <Footer style={{ textAlign: 'center' }}>
         PurrfectMatch ©{new Date().getFullYear()} Created by Ervenderr
-      </Footer>
+    </Footer>
   )
 }
 
