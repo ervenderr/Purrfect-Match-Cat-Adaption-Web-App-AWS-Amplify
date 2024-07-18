@@ -9,10 +9,12 @@ const useAuthCheck = () => {
   useEffect(() => {
     const checkCurrentUser = async () => {
       try {
-        const session = await fetchAuthSession();
-        // const user = await getCurrentUser();
+        const session = (await fetchAuthSession()).tokens.idToken.payload["cognito:groups"][0];
         console.log('AccessToken:', session);
-        // console.log('user:', user);
+
+        // if (session !== 'Admins' || session !== 'Editors') {
+        //   navigate('/access-denied');
+        // }
         // // navigate('/dashboard');
       } catch (error) {
         console.error('No current user:', error);

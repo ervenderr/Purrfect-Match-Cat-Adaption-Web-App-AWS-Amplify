@@ -13,6 +13,7 @@ type Cat
   name: String!
   breed: String!
   age: Int!
+  gender: String!
   status: String!
   description: String!
   image: String!

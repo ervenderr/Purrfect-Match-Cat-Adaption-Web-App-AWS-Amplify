@@ -6,6 +6,7 @@ import { generateClient } from 'aws-amplify/api';
 import { useState, useEffect } from 'react';
 import { onCreateCat } from '../../../graphql/subscriptions';
 import { uploadData } from 'aws-amplify/storage';
+import DOMPurify from 'dompurify';
 
 
 const CreateForm = ({ setOpen, fetchCats }) => {
@@ -22,8 +23,15 @@ const CreateForm = ({ setOpen, fetchCats }) => {
       } else {
         setSelectedFile(file);
       }
-      return isJPEG || Upload.LIST_IGNORE;
+
+      const isLt2M = file.size / 1024 / 1024 < 2;
+      if (!isLt2M) {
+        message.error('Image must smaller than 2MB!');
+      }
+
+      return isJPEG || Upload.LIST_IGNORE && isLt2M ;
     },
+    
     onChange: (info) => {
       console.log(info.fileList);
     },
@@ -37,6 +45,7 @@ const CreateForm = ({ setOpen, fetchCats }) => {
       const schema = yup.object().shape({
         catname: yup.string().required().min(2).max(50),
         age: yup.number().required().min(1).max(99),
+        gender: yup.string().required(),
         breed: yup.string().required(),
         status: yup.string().required(),
         description: yup.string().required().min(10).max(200),
@@ -46,6 +55,17 @@ const CreateForm = ({ setOpen, fetchCats }) => {
       });
 
       await schema.validate(values, { abortEarly: false });
+
+      const capitalizeFirstLetter = (string) => {
+        return string.charAt(0).toUpperCase() + string.slice(1);
+      };
+      
+      const sanitizedValues = {
+        ...values,
+        catname: capitalizeFirstLetter(DOMPurify.sanitize(values.catname)),
+        description: capitalizeFirstLetter(DOMPurify.sanitize(values.description)),
+      };
+      
 
       // submit the cat image to S3
       const catImage = selectedFile;
@@ -63,6 +83,7 @@ const CreateForm = ({ setOpen, fetchCats }) => {
           input: {
             name: values.catname,
             age: values.age,
+            gender: values.gender,
             breed: values.breed,
             status: values.status,
             description: values.description,
@@ -100,11 +121,12 @@ const CreateForm = ({ setOpen, fetchCats }) => {
             { required: true, message: 'Please enter the cat name' },
             { min: 2, message: 'Cat name must be at least 2 characters' },
             { max: 50, message: 'Cat name cannot exceed 50 characters' },
+            { pattern: /^[A-Za-z\s]+$/, message: 'Cat name must contain only letters' },
           ]}
         >
           <Input />
         </Form.Item>
-        <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', gap: '15px' }}>
           <Form.Item
             label="Age"
             name="age"
@@ -112,16 +134,46 @@ const CreateForm = ({ setOpen, fetchCats }) => {
               { required: true, message: 'Please enter the age' },
               { type: 'number', min: 1, max: 99, message: 'Age must be between 1 and 99' },
             ]}
+            style={{ width: '100%' }}
           >
-            <InputNumber type="number" />
+            <InputNumber type="number" style={{ width: '100%' }} />
           </Form.Item>
+          
+          <Form.Item
+            label="Gender"
+            name="gender"
+            rules={[
+              { required: true, message: 'Please enter a gender' },
+            ]}
+            style={{ width: '100%' }}
+          >
+            <Select
+              showSearch
+              placeholder="Select gender"
+              optionFilterProp="label"
+              options={[
+                {
+                  value: 'Male',
+                  label: 'Male',
+                },
+                {
+                  value: 'Female',
+                  label: 'Female',
+                },
+              ]}
+            />
+          </Form.Item>
+          
+        </div>
+        <div style={{ display: 'flex', justifyContent: 'space-between', gap: '15px' }}>
+          
           <Form.Item
             label="Breed"
             name="breed"
             rules={[
               { required: true, message: 'Please enter the breed' },
             ]}
-            style={{ width: '40%' }}
+            style={{ width: '100%' }}
           >
             <Select
               showSearch
@@ -146,7 +198,7 @@ const CreateForm = ({ setOpen, fetchCats }) => {
             rules={[
               { required: true, message: 'Please enter the status' },
             ]}
-            style={{ width: '30%' }}
+            style={{ width: '100%' }}
           >
             <Select
               style={{
@@ -172,6 +224,7 @@ const CreateForm = ({ setOpen, fetchCats }) => {
             { required: true, message: 'Please enter the description' },
             { min: 10, message: 'Description must be at least 10 characters' },
             { max: 200, message: 'Description cannot exceed 200 characters' },
+            { pattern: /^[A-Za-z\s]+$/, message: 'Description must contain only letters' },
           ]}
         >
           <Input.TextArea />

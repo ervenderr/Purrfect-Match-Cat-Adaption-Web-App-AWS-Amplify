@@ -8,6 +8,7 @@ export const onCreateCat = /* GraphQL */ `
       name
       breed
       age
+      gender
       status
       description
       image
@@ -24,6 +25,7 @@ export const onUpdateCat = /* GraphQL */ `
       name
       breed
       age
+      gender
       status
       description
       image
@@ -40,6 +42,7 @@ export const onDeleteCat = /* GraphQL */ `
       name
       breed
       age
+      gender
       status
       description
       image

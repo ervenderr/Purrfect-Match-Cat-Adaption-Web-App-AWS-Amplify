@@ -11,6 +11,7 @@ export const createCat = /* GraphQL */ `
       name
       breed
       age
+      gender
       status
       description
       image
@@ -30,6 +31,7 @@ export const updateCat = /* GraphQL */ `
       name
       breed
       age
+      gender
       status
       description
       image
@@ -49,6 +51,7 @@ export const deleteCat = /* GraphQL */ `
       name
       breed
       age
+      gender
       status
       description
       image

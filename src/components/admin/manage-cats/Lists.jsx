@@ -6,6 +6,7 @@ import {
   Button,
   ConfigProvider,
   Image,
+  Tag,
 } from "antd";
 import { DeleteOutlined, EditOutlined} from "@ant-design/icons";
 import UpdateModal from "./UpdateModal";
@@ -24,11 +25,11 @@ const Lists = ({ updatedCatData, handleDelete, fetchCats }) => {
   const client = generateClient();
 
 
-  const showModal = async(id, name, age, breed, status, description, image) => {
+  const showModal = async(id, name, age, gender, breed, status, description, image) => {
     setIsModalOpen(true);
     
     setCurrentCatData(
-      {"id": id, "name": name, 'age': age, 'breed': breed, 'status': status, 
+      {"id": id, "name": name, 'age': age, 'gender': gender, 'breed': breed, 'status': status, 
         'description': description, 'image': image}
     );
     const path = new URL(image).pathname;
@@ -68,22 +69,33 @@ const Lists = ({ updatedCatData, handleDelete, fetchCats }) => {
       editable: true,
     },
     {
-      title: "Status",
-      dataIndex: "status",
+      title: "Gender",
+      dataIndex: "gender",
       width: "15%",
-      editable: true,
-    },
-    {
-      title: "Description",
-      dataIndex: "description",
-      width: "20%",
       editable: true,
       ellipsis: true,
     },
     {
+      title: 'Status',
+      dataIndex: 'status',
+      key: 'status',
+      width: '15%',
+      render: (_, record) => {
+        let color = 'green';
+        if (record.status === 'Coming Soon') {
+          color = 'geekblue';
+        }
+        return (
+          <Tag color={color} key={record.status}>
+            {record.status.toUpperCase()}
+          </Tag>
+        );
+      },
+    },
+    {
       title: "Image",
       dataIndex: "image",
-      width: "15%",
+      width: "10%",
       editable: true,
       render: (image) => <Image src={image} alt="Cat" style={{ width: "50px", height: "auto" }} />,
     },
@@ -97,7 +109,7 @@ const Lists = ({ updatedCatData, handleDelete, fetchCats }) => {
           >
             <Button 
             primary="true" 
-            onClick={() => showModal(record.id, record.name, record.age, record.breed, record.status, record.description, record.image)} 
+            onClick={() => showModal(record.id, record.name, record.age, record.gender, record.breed, record.status, record.description, record.image)} 
             style={{ marginRight: "5px" }} icon={<EditOutlined 
             />} />
             <UpdateModal isModalOpen={isModalOpen} setIsModalOpen={setIsModalOpen} catData={currentCatData} fetchCats={fetchCats} />
@@ -128,8 +140,22 @@ const Lists = ({ updatedCatData, handleDelete, fetchCats }) => {
         <Table
         size="small"
           bordered
-          dataSource={updatedCatData}
           columns={columns}
+          expandable={{
+            expandedRowRender: (record) => (
+              <p
+                style={{
+                  margin: 0,
+                }}
+              >
+                {record.description}
+              </p>
+            ),
+            rowExpandable: (record) => record.name !== 'Not Expandable',
+          }}
+      
+          dataSource={updatedCatData || []}
+          
           rowClassName="editable-row"
           rowKey="id"
         />

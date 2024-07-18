@@ -8,6 +8,7 @@ export const getCat = /* GraphQL */ `
       name
       breed
       age
+      gender
       status
       description
       image
@@ -29,6 +30,7 @@ export const listCats = /* GraphQL */ `
         name
         breed
         age
+        gender
         status
         description
         image
