@@ -36,13 +36,12 @@ const ProtectedLayout = ({ collapsed, setCollapsed, colorBgContainer, adminSignO
       adminSignOut={adminSignOut} />
     <Content style={{ overflow: 'auto', backgroundColor: colorBgContainer }}>
       <Routes>
-        <Route path="*" element={<Navigate to="/dashboard" />} />
+        <Route path="/dashboard" element={<ProtectedDashboard />} />
+        <Route path="/adoption-requests" element={<ProtectedAdoptionRequest />} />
+        <Route path="/manage-cats" element={<ProtectedManageCats />} />
+        <Route path="/user" element={<ProtectedUsers />} />
         <Route path="/signin" element={<Navigate to="/" />} />
         <Route path="/signup" element={<Navigate to="/" />} />
-        <Route path="/dashboard" element={<Dashboard />} />
-        <Route path="/adoption-requests" element={<AdoptionRequest />} />
-        <Route path="/manage-cats" element={<ManageCats />} />
-        <Route path="/user" element={<Users />} />
       </Routes>
     </Content>
   </Layout></>
@@ -88,38 +87,18 @@ function App() {
   return (
     <View>
         <Layout style={{ height: '100vh' }}>
-          <Routes>
-            { !loggedIn && (
-            <>
-              <Route path="/" element={<LandingPage />} />
-              <Route path="/signin" element={<Signin />} />
-              <Route path="/signup" element={<Signup />} />
-              <Route path="/access-denied" element={<AccessDenied />} />
-            </>
-            )}
+        <Routes>
+            <Route path="/" element={<LandingPage />} />
               <Route
                 path="*"
                 element={
                 <Authenticator loginMechanisms={['email']} components={components} socialProviders={['google']}  >
-                  <Sidebar collapsed={collapsed} />
-                  <Layout>
-                  <Topbar
-                    setCollapsed={setCollapsed}
+                  <ProtectedLayout
                     collapsed={collapsed}
+                    setCollapsed={setCollapsed}
                     colorBgContainer={colorBgContainer}
-                    adminSignOut={adminSignOut} />
-                  <Content style={{ overflow: 'auto', backgroundColor: colorBgContainer }}>
-                    <Routes>
-                      <Route path="*" element={<Navigate to="/dashboard" />} />
-                      <Route path="/signin" element={<Navigate to="/" />} />
-                      <Route path="/signup" element={<Navigate to="/" />} />
-                      <Route path="/dashboard" element={<Dashboard />} />
-                      <Route path="/adoption-requests" element={<AdoptionRequest />} />
-                      <Route path="/manage-cats" element={<ManageCats />} />
-                      <Route path="/user" element={<Users />} />
-                    </Routes>
-                  </Content>
-                </Layout>
+                    adminSignOut={adminSignOut}
+                  />
                   </Authenticator>
                 }>
               </Route>

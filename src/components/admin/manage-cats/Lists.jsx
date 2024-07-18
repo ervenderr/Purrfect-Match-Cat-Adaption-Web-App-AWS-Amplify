@@ -81,9 +81,9 @@ const Lists = ({ updatedCatData, handleDelete, fetchCats }) => {
       key: 'status',
       width: '15%',
       render: (_, record) => {
-        let color = 'green';
+        let color = '#87d068';
         if (record.status === 'Coming Soon') {
-          color = 'geekblue';
+          color = '#2db7f5';
         }
         return (
           <Tag color={color} key={record.status}>

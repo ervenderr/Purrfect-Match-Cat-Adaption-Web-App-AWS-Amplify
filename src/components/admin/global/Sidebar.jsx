@@ -38,8 +38,8 @@ const Sidebar = ({ collapsed }) => {
                         alignItems: 'center',
                     }}
                 >
-                    <img src={Logo} alt="logo" width={"28px"} />
-                    {collapsed ? '' :
+                    
+                    {collapsed ? <img src={Logo} alt="logo" width={"28px"} /> :
                     <Title level={5} style={{ color: 'white', margin: '0 0 0 10px', fontWeight: 'semiBold' }}>
                         PurrfectMatch
                     </Title>

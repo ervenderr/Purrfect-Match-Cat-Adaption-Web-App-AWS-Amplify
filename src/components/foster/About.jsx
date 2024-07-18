@@ -11,15 +11,14 @@ const About = () => {
         width: '100%',
         height: '100vh',
         // minHeight: '80vh',
-        padding: '24px',
         margin: '0 auto',
+        background: '#f0f2f5',
     }}>
     
         <Row style={{
             display: 'flex',
             justifyContent: 'center',
             alignItems: 'center',
-            padding: '24px',
             margin: '0 auto',
             maxWidth: '1200px',
         }}>

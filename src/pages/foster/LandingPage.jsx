@@ -85,6 +85,7 @@ const LandingPage = () => {
       }}>
         <Hero />
         <About />
+        <Cats />
         <LandingPageFooter />
       </Content>
     </Layout>

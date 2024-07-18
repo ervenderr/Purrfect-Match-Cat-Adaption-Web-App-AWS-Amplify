@@ -216,12 +216,16 @@ const UpdateForm = ({ setOpen, catData, fetchCats }) => {
               optionFilterProp="label"
               options={[
                 {
-                  value: 'Orens',
-                  label: 'Orens',
+                  value: 'British Shorthair',
+                  label: 'British Shorthair',
                 },
                 {
                   value: 'Persian',
                   label: 'Persian',
+                },
+                {
+                  value: 'American Bobtail',
+                  label: 'American Bobtail',
                 },
               ]}
             />

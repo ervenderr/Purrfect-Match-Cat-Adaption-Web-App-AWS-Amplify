@@ -116,7 +116,7 @@ const ManageCats = () => {
       fetchCats();
       setTimeout(() => {
         message.success("Cat deleted successfully");
-      }, 0);
+      }, 1000);
     } catch (error) {
       // console.error("Error deleting cat:", error.message);
       setTimeout(() => {
