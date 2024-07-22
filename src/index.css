@@ -50,3 +50,16 @@ body,
   background-color: #f2f2f2;
   position: relative;
 }
+
+.desktop-nav a,
+.mobile-nav a {
+  margin: 0 10px;
+  color: white;
+  text-decoration: none;
+  cursor: pointer;
+}
+.desktop-nav .active,
+.mobile-nav .active {
+  font-weight: bold;
+  color: #00b96b;
+  }

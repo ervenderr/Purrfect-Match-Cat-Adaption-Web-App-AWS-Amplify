@@ -4,23 +4,27 @@ import Cat1 from "../../assets/balinese-cat.jpeg";
 import { listCats } from "../../graphql/queries";
 import { generateClient } from "aws-amplify/api";
 import { getUrl } from "aws-amplify/storage";
+import { useNavigate } from "react-router-dom";
 
 
 const { Content } = Layout;
-const { Title, Paragraph } = Typography;
+const { Title } = Typography;
 const { Meta } = Card;
 const client = generateClient();
 
-const Cats = () => {
+const Cats = ({ id }) => {
+  const navigate = useNavigate();  
   const [loading, setLoading] = useState(true);
   const [updatedCatData, setUpdatedCatData] = useState([]);
-  const onChange = (checked) => {
-    setLoading(!checked);
-  };
 
+  const handleCardClick = (cat) => {
+    navigate(`/cats/${cat.id}`);
+  }
+  
   useEffect(() => {
     const fetchCats = async () => {
       try {
+        setLoading(true);
         const catsData = await client.graphql({ query: listCats });
         const catData = catsData.data.listCats.items.filter(
           (cat) => cat.status === "Available"
@@ -52,10 +56,13 @@ const Cats = () => {
       }
     };
     fetchCats();
+    setLoading(false);
   }, []);
 
   return (
     <Flex
+      id={ id }
+      name="cats"
       style={{
         width: "100%",
         minHeight: "100vh",
@@ -85,7 +92,7 @@ const Cats = () => {
             marginBottom: "54px",
           }}
         >
-          Our Cats
+          Our Adorable Cats
         </Title>
       </Row>
       <Row align={"middle"} justify={"space-between"}
@@ -97,116 +104,130 @@ const Cats = () => {
           width: "100%",
           padding: "0px 24px",
           gap: "24px",
-        }}
-      >
-        {updatedCatData.map((cat) => (
-        <Col sm={12} md={8} lg={6} key={cat.id}
-        style={{
-            padding: "12px 0px",
-        }}
-        >
-          <Card
-            size="small"
-            style={{
-              minWidth: 220,
-              padding: "14px",
-              borderColor: "rgb(0, 185, 107, 0.2),",
-              boxShadow: "0 2px 8px rgba(0, 185, 107, 0.2)",
-            }}
-            cover={
-              <Image
-                preview={false}
-                height={210}
-                width={'100%'}
-                alt={cat.name}
-                src={cat.image}
-                style={{
-                    display: "flex",
-                    justifyContent: "center",
-                    alignContent: "center",
-                    objectFit: "cover",
-                }}
-              />
-            }
-          >
-            <div>
-              <div style={{ marginBottom: "10px" }}>
-                <Title
-                  level={1}
-                  style={{
-                    color: "#00b96b",
-                    fontSize: "16px",
-                    fontWeight: "bold",
-                    margin: "0px",
-                  }}
-                >
-                  {cat.name}
-                </Title>
-              </div>
-              <Row align={"middle"} justify={"space-between"}>
-                <Col>
-                  <Meta
-                    description="Breed"
-                    style={{
-                      color: "#00152a",
-                      margin: "0px 0px",
-                      fontSize: "10px",
-                    }}
-                  />
-                  <Title
-                    level={1}
-                    style={{
-                      color: "",
-                      fontSize: "16px",
-                      fontWeight: "bold",
-                      margin: "0px",
-                    }}
-                  >
-                    {cat.breed}
-                  </Title>
-                </Col>
-                <Col>
-                  <Meta
-                    description={'Gender'}
-                    style={{
-                      color: "#00152a",
-                      margin: "0px 0px",
-                      fontSize: "10px",
-                    }}
-                  />
-                  <Title
-                    level={1}
-                    style={{
-                      color: "",
-                      fontSize: "16px",
-                      fontWeight: "bold",
-                      margin: "0px",
-                      textAlign: "left",
-                    }}
-                  >
-                    {cat.gender}
-                  </Title>
-                </Col>
-              </Row>
-              <div
-                style={{
-                  marginTop: "10px",
-                  textAlign: "center",
-                  width: "100%",
-                }}
-              >
-                <Button
-                  type="primary"
-                  style={{ marginTop: "10px", width: "100%" }}
-                >
-                  Learn more
-                </Button>
-              </div>
-            </div>
+        }}>
+        {loading ? 
+        (
+            <Card loading={loading} style={{ minWidth: 300, height: 300 }}>
+            <Meta
+              title="Card title"
+              description={
+                <>
+                  <p>This is the description</p>
+                  <p>This is the description</p>
+                </>
+              }
+            />
           </Card>
-        </Col>
-        ))}
-        
+        ) :
+                updatedCatData.map((cat) => (
+                <Col sm={12} md={8} lg={6} key={cat.id}
+                style={{
+                    padding: "12px 0px",
+                }}
+                >
+                  <Card
+                    size="small"
+                    style={{
+                      minWidth: 220,
+                      padding: "14px",
+                      borderColor: "rgb(0, 185, 107, 0.2),",
+                      boxShadow: "0 2px 8px rgba(0, 185, 107, 0.2)",
+                    }}
+                    cover={
+                      <Image
+                        preview={true}
+                        height={210}
+                        width={'100%'}
+                        alt={cat.name}
+                        src={cat.image}
+                        style={{
+                            display: "flex",
+                            justifyContent: "center",
+                            alignContent: "center",
+                            objectFit: "cover",
+                        }}
+                      />
+                    }
+                  >
+                    <div>
+                      <div style={{ marginBottom: "10px" }}>
+                        <Title
+                          level={1}
+                          style={{
+                            color: "#00b96b",
+                            fontSize: "16px",
+                            fontWeight: "bold",
+                            margin: "0px",
+                          }}
+                        >
+                          {cat.name}
+                        </Title>
+                      </div>
+                      <Row align={"middle"} justify={"space-between"}>
+                        <Col>
+                          <Meta
+                            description="Breed"
+                            style={{
+                              color: "#00152a",
+                              margin: "0px 0px",
+                              fontSize: "10px",
+                            }}
+                          />
+                          <Title
+                            level={1}
+                            style={{
+                              color: "",
+                              fontSize: "16px",
+                              fontWeight: "bold",
+                              margin: "0px",
+                            }}
+                          >
+                            {cat.breed}
+                          </Title>
+                        </Col>
+                        <Col>
+                          <Meta
+                            description={'Gender'}
+                            style={{
+                              color: "#00152a",
+                              margin: "0px 0px",
+                              fontSize: "10px",
+                            }}
+                          />
+                          <Title
+                            level={1}
+                            style={{
+                              color: "",
+                              fontSize: "16px",
+                              fontWeight: "bold",
+                              margin: "0px",
+                              textAlign: "left",
+                            }}
+                          >
+                            {cat.gender}
+                          </Title>
+                        </Col>
+                      </Row>
+                      <div
+                        style={{
+                          marginTop: "10px",
+                          textAlign: "center",
+                          width: "100%",
+                        }}
+                      >
+                        <Button
+                          onClick={() => handleCardClick(cat)}
+                          type="primary"
+                          style={{ marginTop: "10px", width: "100%" }}
+                        >
+                          Learn more
+                        </Button>
+                      </div>
+                    </div>
+                  </Card>
+                </Col>
+                ))
+            }
       </Row>
     </Flex>
   );

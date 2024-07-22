@@ -1,34 +1,39 @@
 
-import React from 'react';
-import { Image, Layout, Menu } from 'antd';
+import {useState} from 'react';
+import { Image, Layout, Menu, Drawer, Button } from 'antd';
 import Logo from '../../../assets/logo-icon.png';
+import { useMediaQuery } from 'react-responsive';
+import { MenuOutlined } from '@ant-design/icons';
+import { Link as ScrollLink, Element } from 'react-scroll';
+import { Link } from 'react-router-dom';
+
+
+
 
 const { Header } = Layout;
 
 
 const TopNav = () => {
+  const [open, setOpen] = useState(false);
+  const isMobile = useMediaQuery({ query: '(max-width: 768px)' });
 
-  const menuItems = [
-    {
-      key: '1',
-      label: 'Home',
-    },
-    {
-      key: '2',
-      label: 'About',
-    },
-    {
-      key: '3',
-      label: 'Contact',
-    },
-  ];
+
+  const showDrawer = () => {
+    setOpen(true);
+  };
+
+  const onClose = () => {
+    setOpen(false);
+  };
+
+
 
     return (
       <Header 
       style={{
         position: 'sticky',
         top: 0,
-        zIndex: 1,
+        zIndex: 999,
         width: '100%',
         display: 'flex',
         alignItems: 'center',
@@ -40,15 +45,45 @@ const TopNav = () => {
             <span style={{fontSize: '20px'}} >PurrfectMatch</span>
         </div>
 
-        <Menu 
-        theme="dark" 
-        mode="horizontal"  
-        defaultSelectedKeys={["1"]} 
-        style={{ lineHeight: '34px' }} 
-        breakpoint="lg" 
-        items={menuItems}
-        collapsedWidth="0">
-        </Menu>
+        <nav className={isMobile ? 'mobile-nav' : 'desktop-nav'}>
+        {!isMobile ? (
+          <>
+            <ScrollLink to="home" spy={true} smooth={true} duration={500} activeClass="active">
+              Home
+            </ScrollLink>
+            <ScrollLink to="about" spy={true} smooth={true} duration={500} activeClass="active">
+              About
+            </ScrollLink>
+            <ScrollLink to="cats" spy={true} smooth={true} duration={500} activeClass="active">
+              Cats
+            </ScrollLink>
+          </>
+        ) : (
+          <>
+            <MenuOutlined
+              onClick={showDrawer}
+              style={{
+                fontSize: '24px',
+                color: 'white',
+                cursor: 'pointer',
+              }}
+            />
+            <Drawer title="Menu" onClose={onClose} open={open} >
+              <ScrollLink to="home" spy={true} smooth={true} duration={500} activeClass="active" onClick={onClose}>
+                Home
+              </ScrollLink>
+              <ScrollLink to="about" spy={true} smooth={true} duration={500} activeClass="active" onClick={onClose}>
+                About
+              </ScrollLink>
+              <ScrollLink to="cats" spy={true} smooth={true} duration={500} activeClass="active" onClick={onClose}>
+                Cats
+              </ScrollLink>
+            </Drawer>
+          </>
+        )}
+      </nav>
+
+        
         
       </Header>
     );

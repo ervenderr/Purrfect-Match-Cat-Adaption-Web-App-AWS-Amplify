@@ -192,6 +192,10 @@ const CreateForm = ({ setOpen, fetchCats }) => {
                   value: 'American Bobtail',
                   label: 'American Bobtail',
                 },
+                {
+                  value: 'American Shorthair',
+                  label: 'American Shorthair',
+                },
               ]}
             />
           </Form.Item>

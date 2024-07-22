@@ -8,7 +8,7 @@ const { Title, Paragraph } = Typography
 const Hero = () => {
   return (
     
-      <div style={{
+      <div id='home' style={{
         width: '100%',
         height: '100%',
         backgroundImage: `url(${HeroBg})`,

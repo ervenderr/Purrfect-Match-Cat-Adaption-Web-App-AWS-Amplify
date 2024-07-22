@@ -227,6 +227,10 @@ const UpdateForm = ({ setOpen, catData, fetchCats }) => {
                   value: 'American Bobtail',
                   label: 'American Bobtail',
                 },
+                {
+                  value: 'American Shorthair',
+                  label: 'American Shorthair',
+                },
               ]}
             />
           </Form.Item>
@@ -251,6 +255,10 @@ const UpdateForm = ({ setOpen, catData, fetchCats }) => {
                 {
                   value: 'Available',
                   label: 'Available',
+                },
+                {
+                  value: 'Adopted',
+                  label: 'Adopted',
                 },
               ]}
             />

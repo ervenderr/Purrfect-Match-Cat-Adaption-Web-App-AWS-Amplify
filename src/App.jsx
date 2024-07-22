@@ -12,6 +12,7 @@ import Dashboard from './pages/admin/dashboard/Dashboard';
 import ManageCats from './pages/admin/manage-cats/ManageCats';
 import AdoptionRequest from './pages/admin/adoption-request/AdoptionRequest';
 import Users from './pages/admin/users/Users';
+import CatDetails from './pages/foster/CatDetails';
 
 
 import { Amplify } from 'aws-amplify';
@@ -42,6 +43,7 @@ const ProtectedLayout = ({ collapsed, setCollapsed, colorBgContainer, adminSignO
         <Route path="/user" element={<ProtectedUsers />} />
         <Route path="/signin" element={<Navigate to="/" />} />
         <Route path="/signup" element={<Navigate to="/" />} />
+        <Route path="*" element={<Navigate to="/" />} />
       </Routes>
     </Content>
   </Layout></>
@@ -89,6 +91,7 @@ function App() {
         <Layout style={{ height: '100vh' }}>
         <Routes>
             <Route path="/" element={<LandingPage />} />
+            <Route path="/cats/:id" element={<CatDetails />} />
               <Route
                 path="*"
                 element={

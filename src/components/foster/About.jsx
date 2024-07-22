@@ -7,7 +7,7 @@ const { Title, Paragraph } = Typography
 const About = () => {
     
   return (
-    <Flex style={{
+    <Flex id='about' style={{
         width: '100%',
         height: '100vh',
         // minHeight: '80vh',
