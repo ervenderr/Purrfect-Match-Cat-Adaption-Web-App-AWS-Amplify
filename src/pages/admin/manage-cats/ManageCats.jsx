@@ -18,18 +18,31 @@ const ManageCats = () => {
   const [ urls, setUrls ] = useState([]);
   const [ open, setOpen ] = useState(false);
   const [ updatedCatData, setUpdatedCatData ] = useState([]);
+  const [tableParams, setTableParams] = useState({
+    pagination: {
+      current: 1,
+      pageSize: 10,
+      total: 0,
+    },
+  });
+  const [nextToken, setNextToken] = useState(null);
 
 
   const fetchCats = useCallback(async () => {
     try {
-      const catsData = await client.graphql({ query: listCats , authMode: 'userPool'});
+      const catsData = await client.graphql({ 
+        query: listCats,
+        variables: {
+          limit: tableParams.pagination.pageSize,
+        },    
+        authMode: 'userPool'
+      });
       const catData = catsData.data.listCats.items;
       const catUid = catData.map(cat => cat.image);
 
       const urls = await Promise.all(
         catUid.map(async (uid) => {
           const url = await getUrl({
-            // path: ({identityId}) => `protected/${identityId}/cats/${uid}.jpeg`,
             path: `public/cats/${uid}.jpeg`, 
             options: {
               level: 'protected',
@@ -43,17 +56,26 @@ const ManageCats = () => {
         ...cat,
         image: urls[index]
       }));
-
-      // console.log("Updated Cats data:", urls)
+      const nextToken = catsData.data.listCats.nextToken;
 
       setCatData(catData);
       setCatUid(catUid);
       setUrls(urls);
       setUpdatedCatData(updatedCatData);
+      setNextToken(nextToken);
+      setTableParams((prevParams) => ({
+        ...prevParams,
+        pagination: {
+          ...prevParams.pagination,
+          total: updatedCatData.length,
+        },
+      }));
+
+      // console.log("nextToken", nextToken);
     } catch (error) {
       console.error("Error fetching cats:", error);
     }
-  }, []);
+  }, [client, tableParams.pagination.pageSize]);
 
   useEffect(() => {
     fetchCats();
@@ -131,6 +153,22 @@ const ManageCats = () => {
     setOpen(true);
   }
 
+  const handleTableChange = (pagination, filters, sorter) => {
+    setTableParams({
+      pagination,
+      filters,
+      sortOrder: Array.isArray(sorter) ? undefined : sorter.order,
+      sortField: Array.isArray(sorter) ? undefined : sorter.field,
+    });
+
+    // Reset nextToken when the page size changes
+    if (pagination.pageSize !== tableParams.pagination.pageSize) {
+      setNextToken(null);
+      setData([]);
+    }
+  };
+
+
   return (
     <Content
     style={{
@@ -162,7 +200,13 @@ const ManageCats = () => {
       </Content>
     
     <Card>
-      <Lists updatedCatData={updatedCatData} handleDelete={handleDelete} fetchCats={fetchCats} />
+      <Lists 
+      updatedCatData={updatedCatData} 
+      handleDelete={handleDelete} 
+      fetchCats={fetchCats}
+      tableParams={tableParams}
+      handleTableChange={handleTableChange}
+      />
       </Card>
     </Content>
   );

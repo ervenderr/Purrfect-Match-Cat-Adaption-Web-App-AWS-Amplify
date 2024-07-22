@@ -18,11 +18,14 @@ import { getUrl } from "aws-amplify/storage";
 
 
 
-const Lists = ({ updatedCatData, handleDelete, fetchCats }) => {
+const Lists = ({ updatedCatData, handleDelete, fetchCats, tableParams, handleTableChange }) => {
   const [form] = Form.useForm();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [currentCatData, setCurrentCatData] = useState({});
   const client = generateClient();
+
+
+
 
 
   const showModal = async(id, name, age, gender, breed, status, description, image) => {
@@ -141,6 +144,8 @@ const Lists = ({ updatedCatData, handleDelete, fetchCats }) => {
     >
       <Form form={form} component={false}>
         <Table
+        pagination={tableParams.pagination}
+        handleTableChange={handleTableChange}
         size="small"
           bordered
           columns={columns}

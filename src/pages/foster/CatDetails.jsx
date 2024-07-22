@@ -3,7 +3,7 @@ import { useParams } from 'react-router-dom'
 import { generateClient } from "aws-amplify/api";
 import { getCat } from '../../graphql/queries'
 import { getUrl } from "aws-amplify/storage";
-import { Layout, Spin, Typography, Image, Button } from 'antd'
+import { Layout, Spin, Typography, Image, Button, Row, Col, Divider, Space, Tag } from 'antd'
 import LandingPageFooter from '../../components/foster/global/LandingPageFooter';
 import TopNav from '../../components/foster/global/TopNav';
 import Logo from '../../assets/logo-icon.png';
@@ -78,23 +78,63 @@ const CatDetails = () => {
             <span style={{fontSize: '20px'}} >PurrfectMatch</span>
         </div>
 
-        <Button onClick={() => {navigate(-1)}} type="primary">Back</Button>
-            
+        <Button onClick={() => {navigate(-1)}} type="primary">Back</Button>   
       </Header>
-        <Content style={{ padding: '20px', backgroundColor: '#fff' }}>
-            <Title level={1}>{catData.name}</Title>
-            <Image src={catImg} alt={catData.name} width={250} />
-            <br />
-            <Text>Breed: {catData.breed}</Text>
-            <br />
-            <Text>Gender: {catData.gender}</Text>
-            <br />
-            <Text>Age: {catData.age}</Text>
-            <br />
-            <Text>Description: {catData.description}</Text>
-            <br />
-            <Text>Status: {catData.status}</Text>
-      </Content>
+
+      <Content 
+            style={{ 
+                width: '100%',
+                padding: '20px', 
+                backgroundColor: '#fff',
+            }}>
+            <Row 
+                style={{
+                    display: 'flex',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    width: '100%',
+                    maxWidth: '1200px',
+                    margin: '0 auto',
+                }}
+                gutter={[16, 16]}
+            >
+                <Col xs={24} sm={24} md={12} lg={12} xl={12}>
+                    <Image 
+                        src={catImg} 
+                        alt="Cat" 
+                        width='100%'
+                        style={{
+                            maxWidth: '80%',
+                            borderRadius: '8px',
+                        }}
+                    />
+                </Col>
+                <Col 
+                    xs={24} 
+                    sm={24} 
+                    md={12} 
+                    lg={12} 
+                    xl={12}
+                    style={{
+                        padding: '12px',
+                    }}
+                >
+                    <Title style={{fontWeight: 'bold', fontSize: 'px'}} level={2}>{catData.name}</Title>
+                    <Divider />
+                    <Space direction="vertical" size="middle">
+                        <Text><strong>Breed:</strong> {catData.breed}</Text>
+                        <Text><strong>Age:</strong> {catData.age}</Text>
+                        <Text><strong>Gender:</strong> {catData.gender}</Text>
+                        <Text><strong>Description:</strong> {catData.description}</Text>
+                    </Space>
+                    <Divider />
+                    <Button type="primary" style={{ marginTop: '16px' }}>
+                        Adopt {catData.name}
+                    </Button>
+                </Col>
+            </Row>
+        </Content>
+      
       <LandingPageFooter />
       </>
   )
