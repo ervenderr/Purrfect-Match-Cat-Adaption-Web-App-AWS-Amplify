@@ -18,20 +18,18 @@ const Lists = () => {
   const [data, setData] = useState(originData);
   const [editingKey, setEditingKey] = useState("");
 
-  const isEditing = useCallback((record) => record.key === editingKey, [editingKey]);
+  const isEditing = (record) => record.key === editingKey;
 
   const edit = (record) => {
     form.setFieldsValue({
-      name: "",
-      cat: "",
-      address: "",
+      status: '',
       ...record,
     });
     setEditingKey(record.key);
   };
 
   const cancel = () => {
-    setEditingKey("");
+    setEditingKey('');
   };
 
   const save = async (key) => {
@@ -42,18 +40,22 @@ const Lists = () => {
 
       if (index > -1) {
         const item = newData[index];
-        newData.splice(index, 1, { ...item, ...row });
+        newData.splice(index, 1, {
+          ...item,
+          ...row,
+        });
         setData(newData);
-        setEditingKey("");
+        setEditingKey('');
       } else {
         newData.push(row);
         setData(newData);
-        setEditingKey("");
+        setEditingKey('');
       }
     } catch (errInfo) {
-      console.log("Validate Failed:", errInfo);
+      console.log('Validate Failed:', errInfo);
     }
   };
+
 
   const handleDelete = useCallback((key) => {
     setData(data.filter((item) => item.key !== key));
@@ -64,19 +66,16 @@ const Lists = () => {
       title: "Name",
       dataIndex: "name",
       width: "15%",
-      editable: true,
     },
     {
       title: "Address",
       dataIndex: "address",
       width: "25%",
-      editable: true,
     },
     {
       title: "Cat",
       dataIndex: "cat",
       width: "15%",
-      editable: true,
     },
     {
       title: "Status",
@@ -120,10 +119,9 @@ const Lists = () => {
         ) : (
           <>
             <Typography.Link
-              disabled={editingKey !== ""}
-              onClick={() => edit(record)}
+              disabled={editingKey !== ''} onClick={() => edit(record)}
             >
-              <Button primary style={{ marginRight: "5px" }} icon={<EditOutlined />}></Button>
+              <Button style={{ marginRight: "5px" }} icon={<EditOutlined />}></Button>
             </Typography.Link>
             <Popconfirm
               title="Sure to delete?"
@@ -145,6 +143,7 @@ const Lists = () => {
       ...col,
       onCell: (record) => ({
         record,
+        inputType: 'select',
         dataIndex: col.dataIndex,
         title: col.title,
         editing: isEditing(record),

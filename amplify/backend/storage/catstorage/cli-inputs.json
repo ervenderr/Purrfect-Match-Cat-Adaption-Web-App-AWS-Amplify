@@ -1,7 +1,7 @@
 {
-  "resourceName": "CatsStorage",
-  "policyUUID": "e7ef73b7",
-  "bucketName": "purrfectmatchcatadap1336497a3c054694b34189df4ab",
+  "resourceName": "catstorage",
+  "policyUUID": "04fc7b2f",
+  "bucketName": "purrfectmatchcatadapa8ee58b785df46a48985449787b",
   "storageAccess": "authAndGuest",
   "guestAccess": [
     "READ"
@@ -10,13 +10,14 @@
     "CREATE_AND_UPDATE",
     "READ"
   ],
+  "triggerFunction": "NONE",
   "groupAccess": {
-    "Admins": [
+    "Admin": [
       "CREATE_AND_UPDATE",
       "READ",
       "DELETE"
     ],
-    "Editors": [
+    "Editor": [
       "CREATE_AND_UPDATE",
       "READ"
     ]

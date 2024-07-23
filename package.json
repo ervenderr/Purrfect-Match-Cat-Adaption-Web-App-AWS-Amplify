@@ -11,9 +11,9 @@
   },
   "dependencies": {
     "@ant-design/charts": "^2.1.1",
-    "@aws-amplify/ui-react": "^6.1.12",
+    "@aws-amplify/ui-react": "^6.1.13",
     "antd": "^5.18.3",
-    "aws-amplify": "^6.3.8",
+    "aws-amplify": "^6.4.2",
     "axios": "^1.7.2",
     "bootstrap": "^5.3.3",
     "dompurify": "^3.1.6",

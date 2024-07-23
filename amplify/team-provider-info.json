@@ -1,33 +1,26 @@
 {
   "dev": {
     "awscloudformation": {
-      "AuthRoleName": "amplify-purrfectmatchcatadap-dev-ec88d-authRole",
-      "UnauthRoleArn": "arn:aws:iam::339713029817:role/amplify-purrfectmatchcatadap-dev-ec88d-unauthRole",
-      "AuthRoleArn": "arn:aws:iam::339713029817:role/amplify-purrfectmatchcatadap-dev-ec88d-authRole",
+      "AuthRoleName": "amplify-purrfectmatchcatadap-dev-69111-authRole",
+      "UnauthRoleArn": "arn:aws:iam::339713029817:role/amplify-purrfectmatchcatadap-dev-69111-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::339713029817:role/amplify-purrfectmatchcatadap-dev-69111-authRole",
       "Region": "us-east-2",
-      "DeploymentBucketName": "amplify-purrfectmatchcatadap-dev-ec88d-deployment",
-      "UnauthRoleName": "amplify-purrfectmatchcatadap-dev-ec88d-unauthRole",
-      "StackName": "amplify-purrfectmatchcatadap-dev-ec88d",
-      "StackId": "arn:aws:cloudformation:us-east-2:339713029817:stack/amplify-purrfectmatchcatadap-dev-ec88d/304a9b90-3772-11ef-b012-069df8d16edf",
-      "AmplifyAppId": "doqefy8duc035"
+      "DeploymentBucketName": "amplify-purrfectmatchcatadap-dev-69111-deployment",
+      "UnauthRoleName": "amplify-purrfectmatchcatadap-dev-69111-unauthRole",
+      "StackName": "amplify-purrfectmatchcatadap-dev-69111",
+      "StackId": "arn:aws:cloudformation:us-east-2:339713029817:stack/amplify-purrfectmatchcatadap-dev-69111/30b62640-4897-11ef-8673-06a8a04877e3",
+      "AmplifyAppId": "d246lmwes90nf2"
     },
     "categories": {
-      "api": {
-        "purrfectmatchcatadap": {},
-        "AdminQueries": {}
-      },
       "auth": {
-        "purrfectmatchcatadapbfd068b1": {},
+        "purrfectmatchcatadap3c3f26ac": {},
         "userPoolGroups": {}
       },
-      "storage": {
-        "CatsStorage": {}
+      "api": {
+        "purrfectmatchcatadap": {}
       },
-      "function": {
-        "AdminQueriesa9a5b5b6": {
-          "deploymentBucketName": "amplify-purrfectmatchcatadap-dev-ec88d-deployment",
-          "s3Key": "amplify-builds/AdminQueriesa9a5b5b6-785144666735682b5956-build.zip"
-        }
+      "storage": {
+        "catstorage": {}
       }
     }
   }

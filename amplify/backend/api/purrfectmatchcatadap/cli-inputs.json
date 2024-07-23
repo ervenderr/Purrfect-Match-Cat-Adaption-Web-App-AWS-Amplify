@@ -4,29 +4,14 @@
     "apiName": "purrfectmatchcatadap",
     "serviceName": "AppSync",
     "defaultAuthType": {
-      "mode": "AMAZON_COGNITO_USER_POOLS",
-      "cognitoUserPoolId": "authpurrfectmatchcatadapbfd068b1"
+      "mode": "API_KEY",
+      "expirationTime": 7
     },
-    "conflictResolution": {},
     "additionalAuthTypes": [
       {
-        "mode": "API_KEY",
-        "expirationTime": 7,
-        "apiKeyExpirationDate": "2024-07-22T00:49:51.590Z",
-        "keyDescription": "managecat"
+        "mode": "AMAZON_COGNITO_USER_POOLS",
+        "cognitoUserPoolId": "authpurrfectmatchcatadap3c3f26ac"
       }
     ]
-  },
-  "Statement": [
-    {
-      "Sid": "DescribeQueryScanBooksTable",
-      "Effect": "Allow",
-      "Action": [
-        "dynamodb:DescribeTable",
-        "dynamodb:Query",
-        "dynamodb:Scan"
-      ],
-      "Resource": "arn:aws:dynamodb:us-west-2:account-id:table/Books"
-    }
-  ]
+  }
 }

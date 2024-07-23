@@ -1,10 +1,10 @@
 {
   "version": "1",
   "cognitoConfig": {
-    "identityPoolName": "purrfectmatchcatadapbfd068b1_identitypool_bfd068b1",
+    "identityPoolName": "purrfectmatchcatadap3c3f26ac_identitypool_3c3f26ac",
     "allowUnauthenticatedIdentities": true,
-    "resourceNameTruncated": "purrfebfd068b1",
-    "userPoolName": "purrfectmatchcatadapbfd068b1_userpool_bfd068b1",
+    "resourceNameTruncated": "purrfe3c3f26ac",
+    "userPoolName": "purrfectmatchcatadap3c3f26ac_userpool_3c3f26ac",
     "autoVerifiedAttributes": [
       "email"
     ],
@@ -31,18 +31,18 @@
     "userpoolClientReadAttributes": [
       "email"
     ],
-    "userpoolClientLambdaRole": "purrfebfd068b1_userpoolclient_lambda_role",
+    "userpoolClientLambdaRole": "purrfe3c3f26ac_userpoolclient_lambda_role",
     "userpoolClientSetAttributes": false,
-    "sharedId": "bfd068b1",
-    "resourceName": "purrfectmatchcatadapbfd068b1",
+    "sharedId": "3c3f26ac",
+    "resourceName": "purrfectmatchcatadap3c3f26ac",
     "authSelections": "identityPoolAndUserPool",
     "useDefault": "default",
     "usernameAttributes": [
       "email"
     ],
     "userPoolGroupList": [
-      "Admins",
-      "Editors"
+      "Admin",
+      "Editor"
     ],
     "serviceName": "Cognito",
     "usernameCaseSensitive": false,
@@ -60,7 +60,6 @@
       ]
     },
     "breakCircularDependency": true,
-    "dependsOn": [],
-    "adminQueryGroup": "Admins"
+    "dependsOn": []
   }
 }

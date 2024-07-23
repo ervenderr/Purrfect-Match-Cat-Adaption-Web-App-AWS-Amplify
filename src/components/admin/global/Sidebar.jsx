@@ -54,7 +54,7 @@ const Sidebar = ({ collapsed }) => {
                     alignItems: 'center',
                     margin: '5px auto 25px auto',
                 }}>
-                    { role === 'Admins' ? 
+                    { role === 'Admin' ? 
                     <Image src={adminImg} alt="logo" width={50} 
                     style={{ 
                         margin: '0px auto 10px auto', 
@@ -109,7 +109,7 @@ const Sidebar = ({ collapsed }) => {
                       icon: <SnippetsOutlined />,
                       label: 'Adoption Requests',
                     },
-                    role === 'Admins' &&
+                    role === 'Admin' &&
                     {
                         key: '/user',
                         icon: <UserOutlined />,

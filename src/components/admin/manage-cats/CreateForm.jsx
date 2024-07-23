@@ -103,7 +103,7 @@ const CreateForm = ({ setOpen, fetchCats }) => {
 
     } catch (errors) {
       // Handle validation errors
-      console.log('Validation errors:', errors.errors);
+      console.log('Validation errors:', errors);
     }
   };
   

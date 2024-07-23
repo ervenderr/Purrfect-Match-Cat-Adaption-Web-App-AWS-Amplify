@@ -1,27 +1,5 @@
 {
   "api": {
-    "AdminQueries": {
-      "authorizationType": "AMAZON_COGNITO_USER_POOLS",
-      "dependsOn": [
-        {
-          "attributes": [
-            "UserPoolId"
-          ],
-          "category": "auth",
-          "resourceName": "purrfectmatchcatadapbfd068b1"
-        },
-        {
-          "attributes": [
-            "Arn",
-            "Name"
-          ],
-          "category": "function",
-          "resourceName": "AdminQueriesa9a5b5b6"
-        }
-      ],
-      "providerPlugin": "awscloudformation",
-      "service": "API Gateway"
-    },
     "purrfectmatchcatadap": {
       "dependsOn": [
         {
@@ -29,26 +7,24 @@
             "UserPoolId"
           ],
           "category": "auth",
-          "resourceName": "purrfectmatchcatadapbfd068b1"
+          "resourceName": "purrfectmatchcatadap3c3f26ac"
         }
       ],
       "output": {
         "authConfig": {
           "additionalAuthenticationProviders": [
             {
-              "apiKeyConfig": {
-                "apiKeyExpirationDate": "2024-07-22T00:49:51.590Z",
-                "apiKeyExpirationDays": 7,
-                "description": "managecat"
-              },
-              "authenticationType": "API_KEY"
+              "authenticationType": "AMAZON_COGNITO_USER_POOLS",
+              "userPoolConfig": {
+                "userPoolId": "authpurrfectmatchcatadap3c3f26ac"
+              }
             }
           ],
           "defaultAuthentication": {
-            "authenticationType": "AMAZON_COGNITO_USER_POOLS",
-            "userPoolConfig": {
-              "userPoolId": "authpurrfectmatchcatadapbfd068b1"
-            }
+            "apiKeyConfig": {
+              "apiKeyExpirationDays": 7
+            },
+            "authenticationType": "API_KEY"
           }
         }
       },
@@ -57,7 +33,7 @@
     }
   },
   "auth": {
-    "purrfectmatchcatadapbfd068b1": {
+    "purrfectmatchcatadap3c3f26ac": {
       "customAuth": false,
       "dependsOn": [],
       "frontendAuthConfig": {
@@ -93,67 +69,33 @@
             "IdentityPoolId"
           ],
           "category": "auth",
-          "resourceName": "purrfectmatchcatadapbfd068b1"
+          "resourceName": "purrfectmatchcatadap3c3f26ac"
         }
       ],
       "providerPlugin": "awscloudformation",
       "service": "Cognito-UserPool-Groups"
     }
   },
-  "function": {
-    "AdminQueriesa9a5b5b6": {
-      "build": true,
-      "dependsOn": [
-        {
-          "attributes": [
-            "UserPoolId"
-          ],
-          "category": "auth",
-          "resourceName": "purrfectmatchcatadapbfd068b1"
-        }
-      ],
-      "providerPlugin": "awscloudformation",
-      "service": "Lambda"
-    }
-  },
-  "parameters": {
-    "AMPLIFY_function_AdminQueriesa9a5b5b6_deploymentBucketName": {
-      "usedBy": [
-        {
-          "category": "function",
-          "resourceName": "AdminQueriesa9a5b5b6"
-        }
-      ]
-    },
-    "AMPLIFY_function_AdminQueriesa9a5b5b6_s3Key": {
-      "usedBy": [
-        {
-          "category": "function",
-          "resourceName": "AdminQueriesa9a5b5b6"
-        }
-      ]
-    }
-  },
   "storage": {
-    "CatsStorage": {
+    "catstorage": {
       "dependsOn": [
         {
           "attributes": [
             "UserPoolId"
           ],
           "category": "auth",
-          "resourceName": "purrfectmatchcatadapbfd068b1"
+          "resourceName": "purrfectmatchcatadap3c3f26ac"
         },
         {
           "attributes": [
-            "AdminsGroupRole"
+            "AdminGroupRole"
           ],
           "category": "auth",
           "resourceName": "userPoolGroups"
         },
         {
           "attributes": [
-            "EditorsGroupRole"
+            "EditorGroupRole"
           ],
           "category": "auth",
           "resourceName": "userPoolGroups"

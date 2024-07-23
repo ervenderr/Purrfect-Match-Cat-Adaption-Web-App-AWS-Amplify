@@ -6,8 +6,8 @@ type Cat
 @model 
 @auth(rules: [
   { allow: public, operations: [read] }, 
-  { allow: groups, groups: ["Admins"] }, 
-  { allow: groups, groups: ["Editors"], operations: [create, read, update] }
+  { allow: groups, groups: ["Admin"] }, 
+  { allow: groups, groups: ["Editor"], operations: [create, read, update] }
   ]) {
   id: ID!
   name: String!
@@ -18,3 +18,20 @@ type Cat
   description: String!
   image: String!
 }
+
+type Request 
+@model 
+@auth(rules: [
+  { allow: public, operations: [read, create] }, 
+  { allow: groups, groups: ["Admin"] }, 
+  { allow: groups, groups: ["Editor"], operations: [read] }
+  ]) {
+  id: ID!
+  name: String!
+  email: String!
+  phone: String!
+  message: String!
+  catID: ID!
+  cat: Cat @connection(fields: ["catID"])
+}
+
