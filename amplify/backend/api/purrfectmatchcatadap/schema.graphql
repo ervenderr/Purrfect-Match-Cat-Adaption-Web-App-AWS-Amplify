@@ -17,6 +17,7 @@ type Cat
   status: String!
   description: String!
   image: String!
+  requests: [Request] @hasMany(indexName: "byCat", fields: ["id"])
 }
 
 type Request 
@@ -31,7 +32,8 @@ type Request
   email: String!
   phone: String!
   message: String!
-  catID: ID!
-  cat: Cat @connection(fields: ["catID"])
+  status: String!
+  catID: ID! @index(name: "byCat", sortKeyFields: ["id"])
+  cat: Cat @belongsTo(fields: ["catID"])
 }
 

@@ -1,5 +1,4 @@
-import { useState, useCallback } from "react";
-import originData from "./sampleData";
+import { useState, useCallback, useEffect } from "react";
 import {
   Form,
   Popconfirm,
@@ -8,49 +7,127 @@ import {
   Button,
   Tag,
   ConfigProvider,
+  message,
 } from "antd";
 import { DeleteOutlined, EditOutlined} from "@ant-design/icons";
 import EditableCell from "./EditableCell";
+import { listRequests } from "../../../graphql/queries";
+import { generateClient } from 'aws-amplify/api';
+import { updateCat, updateRequest } from '../../../graphql/mutations';
 
 
 const Lists = () => {
   const [form] = Form.useForm();
-  const [data, setData] = useState(originData);
   const [editingKey, setEditingKey] = useState("");
+  const [data, setData] = useState([]);
+  const client = generateClient();
 
-  const isEditing = (record) => record.key === editingKey;
+
+  const fetchRequests = useCallback(async () => {
+    try {
+      const catsData = await client.graphql({ 
+        query: listRequests,  
+        authMode: 'userPool'
+      });
+      const requestData = catsData.data.listRequests.items;
+      setData(requestData);
+    } catch (error) {
+      console.error(error);
+    }
+  });
+
+  useEffect(() => {
+    fetchRequests();
+  }, [fetchRequests]);
+
+
+  
+
+  const isEditing = (record) => record.id === editingKey;
 
   const edit = (record) => {
-    form.setFieldsValue({
-      status: '',
-      ...record,
-    });
-    setEditingKey(record.key);
+
+    const catstatus = record.cat.status;
+    const requestStatus = record.status;
+
+    if(catstatus === 'Adopted' || requestStatus === 'Closed') {
+      message.error('The cat has already been adopted')
+    }
+    else {
+      form.setFieldsValue({
+        status: '',
+        ...record,
+      });
+      setEditingKey(record.id);
+    }
   };
+
 
   const cancel = () => {
     setEditingKey('');
   };
 
-  const save = async (key) => {
+  const save = async (id, catid, catstatus) => {
+    const requestStatus = form.getFieldValue('status');
     try {
-      const row = await form.validateFields();
       const newData = [...data];
-      const index = newData.findIndex((item) => key === item.key);
 
-      if (index > -1) {
-        const item = newData[index];
-        newData.splice(index, 1, {
-          ...item,
-          ...row,
-        });
-        setData(newData);
-        setEditingKey('');
-      } else {
-        newData.push(row);
-        setData(newData);
-        setEditingKey('');
-      }
+      await client.graphql({
+        query: updateRequest,
+        variables: {
+          input: {
+            id: id,
+            status: requestStatus,
+          }},
+          authMode: 'userPool'
+      });
+
+    if (requestStatus == 'Approved') {
+
+      const requestsData = await client.graphql({
+        query: listRequests,
+        variables: {
+          filter: { catID: { eq: catid } }
+        },
+        authMode: 'userPool'
+      });
+
+      const catRequests = requestsData.data.listRequests.items;
+
+      await client.graphql({
+        query: updateCat,
+        variables: {
+          input: {
+            id: catid,
+            status: 'Adopted',
+          }},
+        authMode: 'userPool'
+      });
+
+      const updateRequestsPromises = catRequests.map(req => {
+        if (req.id !== id && req.status !== 'Approved') {
+          return client.graphql({
+            query: updateRequest,
+            variables: {
+              input: {
+                id: req.id,
+                status: 'Closed',
+              }
+            },
+            authMode: 'userPool'
+          });
+        }
+        return null;
+      });
+      await Promise.all(updateRequestsPromises);
+    }
+
+    fetchRequests();
+    setEditingKey('');
+    setTimeout(() => {
+      message.success('Cat updated successfully');
+    }, 0);
+
     } catch (errInfo) {
       console.log('Validate Failed:', errInfo);
     }
@@ -68,13 +145,18 @@ const Lists = () => {
       width: "15%",
     },
     {
-      title: "Address",
-      dataIndex: "address",
-      width: "25%",
+      title: "Email",
+      dataIndex: "email",
+      width: "15%",
     },
     {
-      title: "Cat",
-      dataIndex: "cat",
+      title: "Phone",
+      dataIndex: "phone",
+      width: "15%",
+    },
+    {
+      title: "Selected Cat",
+      dataIndex: ["cat", "name"],
       width: "15%",
     },
     {
@@ -84,7 +166,7 @@ const Lists = () => {
       editable: true,
       render: (_, record) => {
         let color = 'green';
-        if (record.status === 'Rejected') {
+        if (record.status === 'Closed') {
           color = 'volcano';
         }
         if (record.status === 'Pending') {
@@ -105,7 +187,7 @@ const Lists = () => {
         return editable ? (
           <span>
             <Typography.Link
-              onClick={() => save(record.key)}
+              onClick={() => save(record.id, record.cat.id, record.cat.status)}
               style={{
                 marginRight: 8,
               }}
@@ -176,6 +258,15 @@ const Lists = () => {
           bordered
           dataSource={data}
           columns={mergedColumns}
+          expandable={{
+            expandedRowRender: (record) => (
+              <div style={{display: 'flex'}}><div>
+                  <p style={{ margin: 0 }}>Message:</p>
+                  <p style={{ margin: 0 }}>{record.message}</p>
+                </div></div>
+            ),
+            rowExpandable: (record) => record.name !== 'Not Expandable',
+          }}
           rowClassName="editable-row"
           pagination={{
             onChange: cancel,

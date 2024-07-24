@@ -17,9 +17,9 @@ const EditableCell = ({
 }) => {
   const inputNode = inputType === 'select' ? (
     <Select>
-      <Option value="Active">Active</Option>
-      <Option value="Inactive">Inactive</Option>
       <Option value="Pending">Pending</Option>
+      <Option value="Approved">Approved</Option>
+      <Option value="Rejected">Closed</Option>
     </Select>
   ) : (
     children

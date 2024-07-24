@@ -41,7 +41,6 @@ const CreateForm = ({ setOpen, fetchCats }) => {
   const onFinish = async (values) => {
     setLoadings(true);
     try {
-      // Perform validation using yup
       const schema = yup.object().shape({
         catname: yup.string().required().min(2).max(50),
         age: yup.number().required().min(1).max(99),

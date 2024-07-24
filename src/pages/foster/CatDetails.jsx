@@ -8,6 +8,8 @@ import LandingPageFooter from '../../components/foster/global/LandingPageFooter'
 import TopNav from '../../components/foster/global/TopNav';
 import Logo from '../../assets/logo-icon.png';
 import { useNavigate } from 'react-router-dom';
+import ModalReqestForm from '../../components/foster/global/ModalReqestForm';
+
 
 
 const { Text, Title } = Typography;
@@ -20,6 +22,8 @@ const CatDetails = () => {
     const [catData, setCatData] = useState([]);
     const [catImg, setCatImg] = useState('')
     const [loading, setLoading] = useState(true);
+    const [open, setOpen] = useState(false);
+    const [catsId, setCatsId] = useState('');
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -59,6 +63,11 @@ const CatDetails = () => {
       if (catData.status === 'Adopted') {
         return <Text>This Cat has been adopted</Text>;
       }
+    
+    const showModal = (id) => {
+    setOpen(true);
+    setCatsId(id);
+    }
 
   return (
     <>  
@@ -128,9 +137,12 @@ const CatDetails = () => {
                         <Text><strong>Description:</strong> {catData.description}</Text>
                     </Space>
                     <Divider />
-                    <Button type="primary" style={{ marginTop: '16px' }}>
+                    <Button 
+                    onClick={() => showModal(catData.id)}
+                    type="primary" style={{ marginTop: '16px' }}>
                         Adopt {catData.name}
                     </Button>
+                    <ModalReqestForm open={open} setOpen={setOpen} catId={catId} />
                 </Col>
             </Row>
         </Content>

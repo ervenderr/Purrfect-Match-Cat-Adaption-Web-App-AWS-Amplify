@@ -1,10 +1,33 @@
-import React from 'react'
+import {useCallback, useEffect} from 'react'
 import { Layout, Typography, Button, Card } from 'antd'
 import Requests from '../../../components/admin/adoption-request/Requests'
+import { listRequests } from '../../../graphql/queries'
+import { deleteRequest } from '../../../graphql/mutations'
+import { generateClient } from 'aws-amplify/api'
 
 const { Content } = Layout;
 
 const AdoptionRequest = () => {
+  const client = generateClient();
+
+  const fetchRequests = useCallback(async () => {
+    try {
+      const catsData = await client.graphql({ 
+        query: listRequests,  
+        authMode: 'userPool'
+      });
+      const requestData = catsData.data.listRequests.items;
+
+    } catch (error) {
+      console.error(error);
+    }
+  }
+  , []);
+
+  useEffect(() => {
+    fetchRequests();
+  }, [fetchRequests]);
+
   return (
     <Content
       style={{
@@ -29,7 +52,7 @@ const AdoptionRequest = () => {
       </Typography.Text>
 
       <Typography>
-        <Button onClick={() => console.log("Hi")}>Add New Cat</Button>
+        {/* <Button onClick={() => deleteRequests()}>Add New Cat</Button> */}
         {/* <CreateModal open={open} setOpen={setOpen} /> */}
     </Typography>
       </Content>

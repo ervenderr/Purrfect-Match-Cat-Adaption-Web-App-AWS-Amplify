@@ -4,50 +4,10 @@
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/logo-icon.png" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Purrfect Match</title>
+    <title>PurrectMatch</title>
   </head>
   <body>
     <div id="root"></div>
     <script type="module" src="/src/main.jsx"></script>
   </body>
 </html>
-
-<!--
-# This "input" configures a global authorization rule to enable public access to
-# all models in this schema. Learn more about authorization rules here: https://docs.amplify.aws/cli/graphql/authorization-rules
-# input AMPLIFY { globalAuthRule: AuthRule = { allow: public } } # FOR TESTING ONLY!
-
-type Cat 
-@model 
-@auth(rules: [
-  { allow: public, operations: [read] }, 
-  { allow: groups, groups: ["Admins"] }, 
-  { allow: groups, groups: ["Editors"], operations: [create, read, update] }
-  ]) {
-  id: ID!
-  name: String!
-  breed: String!
-  age: Int!
-  gender: String!
-  status: String!
-  description: String!
-  image: String!
-}
-
-type Request 
-@model 
-@auth(rules: [
-  { allow: public, operations: [read, create] }, 
-  { allow: groups, groups: ["Admins"] }, 
-  { allow: groups, groups: ["Editors"], operations: [read] }
-  ]) {
-  id: ID!
-  name: String!
-  email: String!
-  phone: String!
-  message: String!
-  catID: ID!
-  cat: Cat @connection(fields: ["catID"])
-}
-
--->
