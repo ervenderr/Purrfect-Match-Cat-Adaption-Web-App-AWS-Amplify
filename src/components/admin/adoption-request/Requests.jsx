@@ -29,7 +29,10 @@ const Lists = () => {
         query: listRequests,  
         authMode: 'userPool'
       });
-      const requestData = catsData.data.listRequests.items;
+      const requestData = catsData.data.listRequests.items.map(item => ({
+        ...item,
+        key: item.id,
+      }));
       setData(requestData);
     } catch (error) {
       console.error(error);

@@ -7,7 +7,7 @@ const { Meta } = Card;
 
 
 
-const SummaryCards = () => {
+const SummaryCards = ({requestCount, pendingCount}) => {
   const client = generateClient();
 
   const [catsCount, setCatsCount] = useState(0);
@@ -60,7 +60,7 @@ const SummaryCards = () => {
             avatar={
               <Avatar src="https://www.svgrepo.com/show/513532/file-2.svg" />
             }
-            title="5"
+            title={requestCount || '0'}
             description="Total Adoption Requests"
           />
         </Card>
@@ -77,7 +77,7 @@ const SummaryCards = () => {
             avatar={
               <Avatar src="https://www.svgrepo.com/show/226235/wait-hourglass.svg" />
             }
-            title="3"
+            title={pendingCount || '0'}
             description="Pending Requests"
           />
         </Card>

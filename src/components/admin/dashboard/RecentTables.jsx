@@ -1,5 +1,7 @@
 import React from 'react';
-import { Space, Table, Tag } from 'antd';
+import { Space, Table, Tag, Button, Typography } from 'antd';
+import { EyeOutlined } from '@ant-design/icons';
+import { Link } from 'react-router-dom';
 
 
 const columns = [
@@ -9,22 +11,17 @@ const columns = [
       key: 'name',
     },
     {
-      title: 'Address',
-      dataIndex: 'address',
-      key: 'address',
-    },
-    {
-      title: 'Cat Name',
-      key: 'cat',
-      dataIndex: 'cat',
+      title: "Selected Cat",
+      dataIndex: ["cat", "name"],
     },
     {
         title: 'Status',
         dataIndex: 'status',
         key: 'status',
+        fixed: 'right',
         render: (_, record) => {
           let color = 'green';
-          if (record.status === 'Rejected') {
+          if (record.status === 'Closed') {
             color = 'volcano';
           }
           if (record.status === 'Pending') {
@@ -40,33 +37,20 @@ const columns = [
     {
       title: 'Action',
       key: 'action',
+      render: (_, record) => {
+        return (
+          <Typography.Link>
+            <Link to={`/adoption-requests`}>
+              <Button style={{ marginRight: "5px" }} icon={<EyeOutlined />}></Button>
+            </Link>
+          </Typography.Link>
+        );
+      }
     },
   ];
-  const data = [
-    {
-      key: '1',
-      name: 'John Brown',
-      cat: 'Patchie',
-      address: 'New York No. 1 Lake Park',
-      status: 'Pending',
-    },
-    {
-      key: '2',
-      name: 'Jim Green',
-      cat: 'Patchie',
-      address: 'London No. 1 Lake Park',
-      status: 'Pending',
-    },
-    {
-      key: '3',
-      name: 'Joe Black',
-      cat: 'Patchie',
-      address: 'Sydney No. 1 Lake Park',
-      status: 'Approved',
-    },
-  ];
+  
 
-const RecentTables = () => {
+const RecentTables = ({data}) => {
   return <Table columns={columns} dataSource={data}  />;
 }
 

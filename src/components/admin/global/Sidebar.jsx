@@ -1,7 +1,7 @@
 import { Image, Layout, Menu, Typography } from 'antd';
 import Logo from '../../../assets/logo-icon.png';
 import PropTypes from 'prop-types';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { HomeOutlined, BaiduOutlined, SnippetsOutlined, UserOutlined } from '@ant-design/icons';
 import { useState, useEffect } from 'react';
 import CheckRole from '../utils/CheckRole';
@@ -25,7 +25,8 @@ const Sidebar = ({ collapsed }) => {
       }, []);
 
 
-    const navigate = useNavigate();
+      const navigate = useNavigate();
+      const location = useLocation();    
 
     return (
         <Sider trigger={null} collapsible collapsed={collapsed} theme='dark' style={{ height: '100%' }}>
@@ -82,42 +83,39 @@ const Sidebar = ({ collapsed }) => {
                      </>
                      }
                 </Content>
-            <Menu
-            style={{
-                padding: '0px 10px',
-            }}
-                theme="dark"
-                mode="inline"
-                onClick={({ key }) => {
-                    navigate(key);
-                }}
-                defaultSelectedKeys={[window.location.pathname]}
-
-                items={[
-                    {
-                      key: '/dashboard',
-                      icon: <HomeOutlined />,
-                      label: 'Dashboard',
-                    },
-                    {
-                      key: '/manage-cats',
-                      icon: <BaiduOutlined />,
-                      label: 'Manage Cats',
-                    },
-                    {
-                      key: '/adoption-requests',
-                      icon: <SnippetsOutlined />,
-                      label: 'Adoption Requests',
-                    },
-                    role === 'Admin' &&
-                    {
-                        key: '/user',
-                        icon: <UserOutlined />,
-                        label: 'Users',
-                      },
-                  ]}
-            >
-            </Menu>
+                <Menu
+        style={{
+          padding: '0px 10px',
+        }}
+        theme="dark"
+        mode="inline"
+        onClick={({ key }) => {
+          navigate(key);
+        }}
+        selectedKeys={[location.pathname]}
+        items={[
+          {
+            key: '/dashboard',
+            icon: <HomeOutlined />,
+            label: 'Dashboard',
+          },
+          {
+            key: '/manage-cats',
+            icon: <BaiduOutlined />,
+            label: 'Manage Cats',
+          },
+          {
+            key: '/adoption-requests',
+            icon: <SnippetsOutlined />,
+            label: 'Adoption Requests',
+          },
+          role === 'Admin' && {
+            key: '/user',
+            icon: <UserOutlined />,
+            label: 'Users',
+          },
+        ]}
+      />
         </Sider>
     );
 };
