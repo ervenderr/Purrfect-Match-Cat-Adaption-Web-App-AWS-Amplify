@@ -14,6 +14,7 @@ import EditableCell from "./EditableCell";
 import { listRequests } from "../../../graphql/queries";
 import { generateClient } from 'aws-amplify/api';
 import { updateCat, updateRequest } from '../../../graphql/mutations';
+import DOMPurify from 'dompurify';
 
 
 const Lists = () => {
@@ -21,6 +22,18 @@ const Lists = () => {
   const [editingKey, setEditingKey] = useState("");
   const [data, setData] = useState([]);
   const client = generateClient();
+
+  const sanitizeData = (data) => {
+    const sanitizedData = {};
+    Object.keys(data).forEach(key => {
+      if (typeof data[key] === 'string') {
+        sanitizedData[key] = DOMPurify.sanitize(data[key]);
+      } else {
+        sanitizedData[key] = data[key];
+      }
+    });
+    return sanitizedData;
+  };
 
 
   const fetchRequests = useCallback(async () => {
@@ -30,7 +43,7 @@ const Lists = () => {
         authMode: 'userPool'
       });
       const requestData = catsData.data.listRequests.items.map(item => ({
-        ...item,
+        ...sanitizeData(item),
         key: item.id,
       }));
       setData(requestData);
